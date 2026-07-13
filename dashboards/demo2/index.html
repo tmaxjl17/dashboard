@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord DEMO 2 — Dark Pro</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="../../shared/css/components.css">
+<link rel="stylesheet" href="../../shared/css/sidebar.css">
+<link rel="stylesheet" href="../../shared/css/panels.css">
+<link rel="stylesheet" href="css/theme-dark.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============== SIDEBAR ============== -->
+  <aside class="sidebar">
+
+    <div class="sidebar__hero">
+      <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600" alt="Projet">
+      <a href="../../index.html" class="sidebar__back" title="Retour aux tableaux de bord">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="sidebar__hero-badge">En cours</div>
+      <div class="sidebar__hero-title">
+        <h2>Projet de lutte contre les conflits ruraux</h2>
+        <p><i class="fas fa-map-marker-alt"></i> Kenya · Côte d'Ivoire · Sénégal</p>
+      </div>
+    </div>
+
+    <div class="sidebar__progress">
+      <div class="sidebar__progress-header">
+        <span>Avancement temporel</span>
+        <span class="sidebar__progress-pct" id="progressPct">0%</span>
+      </div>
+      <div class="sidebar__progress-bar">
+        <div class="sidebar__progress-fill" id="progressFill"></div>
+      </div>
+      <div class="sidebar__progress-dates">
+        <span><i class="far fa-calendar-check"></i> 1 janv. 2011</span>
+        <span><i class="far fa-calendar-times"></i> 31 déc. 2020</span>
+      </div>
+    </div>
+
+    <div class="sidebar__kpis">
+      <div class="s-kpi">
+        <div class="s-kpi__label">Durée</div>
+        <div class="s-kpi__value">10 ans</div>
+        <div class="s-kpi__sub">2011 → 2020</div>
+      </div>
+      <div class="s-kpi">
+        <div class="s-kpi__label">Décaissé</div>
+        <div class="s-kpi__value">68%</div>
+        <div class="s-kpi__sub">≈ 1,07 Md FCFA</div>
+      </div>
+    </div>
+
+    <div class="cost-card">
+      <div class="cost-card__label"><i class="fas fa-coins"></i> Coût total du projet</div>
+      <div class="cost-card__primary">1 580 000 000 FCFA</div>
+      <div class="cost-card__secondary">≈ 1 580 000 000 CAD</div>
+    </div>
+
+    <div class="sidebar__sections">
+      <div class="info-card is-open">
+        <div class="info-card__header" onclick="toggleCard(this)">
+          <div class="info-card__icon info-card__icon--objective"><i class="fas fa-bullseye"></i></div>
+          <div class="info-card__title">Objectif global</div>
+          <i class="fas fa-chevron-down info-card__chevron"></i>
+        </div>
+        <div class="info-card__body">
+          <div class="info-card__content">
+            Lutter contre les conflits récurrents opposant les paysans aux éleveurs transhumants dans les zones rurales.
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card__header" onclick="toggleCard(this)">
+          <div class="info-card__icon info-card__icon--beneficiaries"><i class="fas fa-users"></i></div>
+          <div class="info-card__title">Bénéficiaires</div>
+          <i class="fas fa-chevron-down info-card__chevron"></i>
+        </div>
+        <div class="info-card__body">
+          <div class="info-card__content">
+            Zones de transhumance des éleveurs de bétail.
+            <div class="tag-group">
+              <span class="tag">Éleveurs</span>
+              <span class="tag">Paysans</span>
+              <span class="tag">Zones rurales</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card__header" onclick="toggleCard(this)">
+          <div class="info-card__icon info-card__icon--zone"><i class="fas fa-globe-africa"></i></div>
+          <div class="info-card__title">Zone d'exécution</div>
+          <i class="fas fa-chevron-down info-card__chevron"></i>
+        </div>
+        <div class="info-card__body">
+          <div class="info-card__content">
+            Le projet couvre 3 pays d'Afrique.
+            <div class="tag-group">
+              <span class="tag">Kenya</span>
+              <span class="tag">Côte d'Ivoire</span>
+              <span class="tag">Sénégal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card__header" onclick="toggleCard(this)">
+          <div class="info-card__icon info-card__icon--funding"><i class="fas fa-hand-holding-usd"></i></div>
+          <div class="info-card__title">Financement</div>
+          <i class="fas fa-chevron-down info-card__chevron"></i>
+        </div>
+        <div class="info-card__body">
+          <div class="info-card__content">
+            3 sources de financement combinées.
+            <div class="tag-group">
+              <span class="tag">Budget National</span>
+              <span class="tag">Banque Mondiale</span>
+              <span class="tag">BAD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dates importantes (timeline) -->
+    <div class="milestones-card">
+      <div class="milestones-card__title">
+        <i class="fas fa-flag-checkered"></i>
+        Dates importantes
+        <span class="milestones-card__title-count">5</span>
+      </div>
+      <ul class="milestone-list" id="milestoneList"></ul>
+    </div>
+
+  </aside>
+
+  <!-- ============== MAIN ============== -->
+  <main class="main">
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="indicateurs"><i class="fas fa-chart-line"></i> Indicateurs</button>
+      <button class="tab" data-tab="activites"><i class="fas fa-tasks"></i> Activités</button>
+      <button class="tab" data-tab="financier"><i class="fas fa-coins"></i> Données Financières</button>
+    </div>
+
+    <!-- ===== ONGLET INDICATEURS ===== -->
+    <section class="tab-panel active" id="panel-indicateurs">
+
+      <div class="kpi-row">
+        <div class="kpi-card kpi-card--success">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Indicateurs suivis</span>
+            <div class="kpi-card__icon"><i class="fas fa-list-check"></i></div>
+          </div>
+          <div class="kpi-card__value">4</div>
+          <div class="kpi-card__trend"><i class="fas fa-arrow-up trend-up"></i> 2 atteints</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Cibles atteintes</span>
+            <div class="kpi-card__icon"><i class="fas fa-bullseye"></i></div>
+          </div>
+          <div class="kpi-card__value">50%</div>
+          <div class="kpi-card__trend"><i class="fas fa-arrow-up trend-up"></i> +25% vs N-1</div>
+        </div>
+        <div class="kpi-card kpi-card--warning">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Progrès moyen</span>
+            <div class="kpi-card__icon"><i class="fas fa-gauge-high"></i></div>
+          </div>
+          <div class="kpi-card__value">68%</div>
+          <div class="kpi-card__trend">de la cible globale</div>
+        </div>
+        <div class="kpi-card kpi-card--danger">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">À risque</span>
+            <div class="kpi-card__icon"><i class="fas fa-triangle-exclamation"></i></div>
+          </div>
+          <div class="kpi-card__value">1</div>
+          <div class="kpi-card__trend">indicateur sous le seuil</div>
+        </div>
+      </div>
+
+      <div class="ind-grid">
+        <aside class="indicators-panel">
+          <div class="indicators-panel__header">
+            <div class="indicators-panel__title">
+              Liste des indicateurs
+              <span class="indicator-count">4</span>
+            </div>
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Rechercher un indicateur..." id="searchInput">
+            </div>
+          </div>
+          <div class="indicators-list" id="indicatorsList"></div>
+        </aside>
+
+        <div class="detail-area">
+          <div class="chart-card">
+            <div class="chart-card__header">
+              <div class="chart-card__title-area">
+                <h3 id="chartTitle">% Bénéficiaires</h3>
+                <div class="chart-card__meta">
+                  <span><strong>Code:</strong> %BENEF_DEMO</span>
+                  <span><strong>Unité:</strong> %</span>
+                  <span><strong>Type:</strong> Cumulatif</span>
+                </div>
+              </div>
+              <div class="chart-card__actions">
+                <label class="checkbox-toggle">
+                  <input type="checkbox" id="indValidatedOnly"> Données validées uniquement
+                </label>
+                <div class="view-toggle">
+                  <input type="radio" id="viewYear" name="view" checked>
+                  <label for="viewYear">Année</label>
+                  <input type="radio" id="viewPeriod" name="view">
+                  <label for="viewPeriod">Période</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-stats">
+              <div class="stat-block">
+                <div class="stat-block__label">Référence</div>
+                <div class="stat-block__value" id="statRef">0,9</div>
+              </div>
+              <div class="stat-block stat-block--current">
+                <div class="stat-block__label">Valeur actuelle</div>
+                <div class="stat-block__value" id="statCurrent">22,5</div>
+              </div>
+              <div class="stat-block stat-block--target">
+                <div class="stat-block__label">Cible</div>
+                <div class="stat-block__value" id="statTarget">0,8</div>
+              </div>
+              <div class="stat-block stat-block--progress">
+                <div class="stat-block__label">% atteint</div>
+                <div class="stat-block__value" id="statProgress">2 813%</div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <canvas id="indChart"></canvas>
+            </div>
+          </div>
+
+          <div class="table-card">
+            <div class="card-header">
+              <h3>Évolution par localité</h3>
+              <div class="table-actions">
+                <button class="btn-icon" title="Exporter"><i class="fas fa-download"></i></button>
+                <button class="btn-icon" title="Filtrer"><i class="fas fa-filter"></i></button>
+                <button class="btn-icon" title="Trier"><i class="fas fa-sort"></i></button>
+              </div>
+            </div>
+            <table class="data-table evo-table">
+              <thead>
+                <tr>
+                  <th>Localité</th><th>Référence</th><th>2011</th><th>2015</th>
+                  <th>% réalisé</th><th>Cible</th><th>Date Fin</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="locality">Lacs</td><td>0,9</td><td>0,2</td><td>15</td>
+                  <td><div class="progress-cell"><div class="progress-cell__bar"><div class="progress-cell__fill progress-cell__fill--high" style="width:100%"></div></div><span class="progress-cell__pct">3 800%</span></div></td>
+                  <td>0,8</td><td>31 déc. 2020</td>
+                </tr>
+                <tr>
+                  <td class="locality">Comoé</td><td>—</td><td>—</td><td>30</td>
+                  <td><div class="progress-cell"><div class="progress-cell__bar"><div class="progress-cell__fill progress-cell__fill--high" style="width:100%"></div></div><span class="progress-cell__pct">100%</span></div></td>
+                  <td>—</td><td>31 déc. 2020</td>
+                </tr>
+                <tr>
+                  <td class="locality">Sassandra</td><td>1,2</td><td>0,5</td><td>8,5</td>
+                  <td><div class="progress-cell"><div class="progress-cell__bar"><div class="progress-cell__fill progress-cell__fill--mid" style="width:65%"></div></div><span class="progress-cell__pct">65%</span></div></td>
+                  <td>13</td><td>31 déc. 2020</td>
+                </tr>
+                <tr>
+                  <td class="locality">Bandama</td><td>0,5</td><td>0,1</td><td>2,3</td>
+                  <td><div class="progress-cell"><div class="progress-cell__bar"><div class="progress-cell__fill progress-cell__fill--low" style="width:25%"></div></div><span class="progress-cell__pct">25%</span></div></td>
+                  <td>9,2</td><td>31 déc. 2020</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ONGLET ACTIVITÉS ===== -->
+    <section class="tab-panel" id="panel-activites">
+
+      <div class="kpi-row">
+        <div class="kpi-card kpi-card--success">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Activités totales</span>
+            <div class="kpi-card__icon"><i class="fas fa-list-check"></i></div>
+          </div>
+          <div class="kpi-card__value">15</div>
+          <div class="kpi-card__trend">sur l'ensemble du projet</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Taux physique moyen</span>
+            <div class="kpi-card__icon"><i class="fas fa-gauge-high"></i></div>
+          </div>
+          <div class="kpi-card__value">62%</div>
+          <div class="kpi-card__trend"><i class="fas fa-arrow-up trend-up"></i> +8 pts vs N-1</div>
+        </div>
+        <div class="kpi-card kpi-card--warning">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Taux budgétaire moyen</span>
+            <div class="kpi-card__icon"><i class="fas fa-coins"></i></div>
+          </div>
+          <div class="kpi-card__value">58%</div>
+          <div class="kpi-card__trend">décalage de 4 pts vs physique</div>
+        </div>
+        <div class="kpi-card kpi-card--danger">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Activités en retard</span>
+            <div class="kpi-card__icon"><i class="fas fa-triangle-exclamation"></i></div>
+          </div>
+          <div class="kpi-card__value">9</div>
+          <div class="kpi-card__trend">sous les 40% d'exécution</div>
+        </div>
+      </div>
+
+      <div class="perf-card">
+        <div class="card-header">
+          <div>
+            <h3>Performance du projet</h3>
+            <p>Répartition des activités par tranches d'exécution</p>
+          </div>
+          <label class="checkbox-toggle">
+            <input type="checkbox"> Données validées uniquement
+          </label>
+        </div>
+
+        <div class="donuts-row">
+          <div class="donut-block">
+            <div class="donut-block__title">Taux physique</div>
+            <div class="donut-wrapper">
+              <canvas id="donutPhysique"></canvas>
+              <div class="donut-center">
+                <div class="donut-center__value">14</div>
+                <div class="donut-center__label">activités</div>
+              </div>
+            </div>
+            <div class="donut-legend" id="legendPhysique"></div>
+          </div>
+
+          <div class="donut-block">
+            <div class="donut-block__title">Taux budgétaire</div>
+            <div class="donut-wrapper">
+              <canvas id="donutBudget"></canvas>
+              <div class="donut-center">
+                <div class="donut-center__value">16</div>
+                <div class="donut-center__label">activités</div>
+              </div>
+            </div>
+            <div class="donut-legend" id="legendBudget"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="evo-card">
+        <div class="card-header">
+          <div>
+            <h3>Évolution des taux d'exécution</h3>
+          </div>
+          <div class="period-toggle">
+            <input type="radio" id="pMonth" name="period">
+            <label for="pMonth">Mensuel</label>
+            <input type="radio" id="pQuarter" name="period" checked>
+            <label for="pQuarter">Trimestriel</label>
+            <input type="radio" id="pYear" name="period">
+            <label for="pYear">Annuel</label>
+          </div>
+        </div>
+
+        <div class="year-pills" id="yearPills"></div>
+
+        <div class="year-summary">
+          <div class="summary-cell">
+            <div class="summary-cell__label">Taux physique fin d'année</div>
+            <div class="summary-cell__value">78% <span class="summary-cell__delta delta-up">+4 pts</span></div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-cell__label">Taux budgétaire fin d'année</div>
+            <div class="summary-cell__value">74% <span class="summary-cell__delta delta-up">+12 pts</span></div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-cell__label">Écart moyen</div>
+            <div class="summary-cell__value">4 pts</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-cell__label">Trimestres actifs</div>
+            <div class="summary-cell__value">4 / 4</div>
+          </div>
+        </div>
+
+        <div class="evo-chart-container">
+          <canvas id="evoChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ONGLET FINANCIER ===== -->
+    <section class="tab-panel" id="panel-financier">
+
+      <div class="kpi-row">
+        <div class="kpi-card kpi-card--gradient">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Budget total</span>
+            <div class="kpi-card__icon"><i class="fas fa-wallet"></i></div>
+          </div>
+          <div class="kpi-card__value">5,326 Md</div>
+          <div class="kpi-card__trend">CAD · 3 sources</div>
+        </div>
+        <div class="kpi-card kpi-card--success">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Décaissé</span>
+            <div class="kpi-card__icon"><i class="fas fa-arrow-trend-up"></i></div>
+          </div>
+          <div class="kpi-card__value" style="color:var(--success)">3,576 Md</div>
+          <div class="kpi-card__trend">CAD · 67,1% du budget</div>
+        </div>
+        <div class="kpi-card kpi-card--warning">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Disponible</span>
+            <div class="kpi-card__icon"><i class="fas fa-piggy-bank"></i></div>
+          </div>
+          <div class="kpi-card__value" style="color:var(--warning)">1,750 Md</div>
+          <div class="kpi-card__trend">CAD · à mobiliser</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__top">
+            <span class="kpi-card__label">Taux global</span>
+            <div class="kpi-card__icon" style="background:var(--purple-light);color:var(--purple)"><i class="fas fa-percent"></i></div>
+          </div>
+          <div class="kpi-card__value">68%</div>
+          <div class="kpi-card__trend"><i class="fas fa-arrow-up trend-up"></i> +9 pts vs N-1</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card" style="padding:0">
+          <div class="card-header">
+            <h3>Évolution du taux de décaissement</h3>
+          </div>
+          <div class="fin-chart-body">
+            <canvas id="finEvoChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card" style="padding:0">
+          <div class="card-header">
+            <h3>Décaissé par source</h3>
+          </div>
+          <div class="fin-chart-body">
+            <div class="source-donut-wrapper">
+              <canvas id="sourceDonut" class="source-donut-canvas"></canvas>
+              <div class="source-center">
+                <div class="source-center__label">Total décaissé</div>
+                <div class="source-center__value">3,576 Md</div>
+                <div class="source-center__sub">CAD</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="card-header">
+          <div>
+            <h3>Plan de financement</h3>
+            <p>Détail par source · valeurs en CAD</p>
+          </div>
+          <div class="table-actions">
+            <button class="btn-action"><i class="fas fa-filter"></i> Filtrer</button>
+            <button class="btn-action btn-action--primary"><i class="fas fa-download"></i> Exporter</button>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="sortable">Financement <i class="fas fa-sort"></i></th>
+                <th class="sortable text-right">Montant <i class="fas fa-sort"></i></th>
+                <th class="sortable text-right">Décaissé <i class="fas fa-sort"></i></th>
+                <th class="sortable text-right">% Décaissé <i class="fas fa-sort-down"></i></th>
+                <th class="sortable text-right">Disponible <i class="fas fa-sort"></i></th>
+              </tr>
+            </thead>
+            <tbody id="planTableBody"></tbody>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td class="text-right">5 326 015 000</td>
+                <td class="text-right">3 576 015 000</td>
+                <td class="text-right">67,1%</td>
+                <td class="text-right">1 750 000 000</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="../../shared/js/charts.js"></script>
+<script src="theme-dark.js"></script>
+<script src="../../shared/js/sidebar.js"></script>
+<script src="../../shared/js/indicateurs.js"></script>
+<script src="../../shared/js/activites.js"></script>
+<script src="../../shared/js/financier.js"></script>
+<script src="../../shared/js/app.js"></script>
+
+</body>
+</html>

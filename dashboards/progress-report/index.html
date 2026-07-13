@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapport d'avancement — Projet DEMO</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="progress-report.css">
+</head>
+<body class="report-body">
+
+<div class="report-app" id="reportApp">
+
+  <!-- ============= TOPBAR ============= -->
+  <header class="report-topbar">
+    <div class="report-topbar__left">
+      <a href="../../index.html" class="report-topbar__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="report-topbar__breadcrumb">
+        <span class="report-topbar__breadcrumb-item">Projet DEMO</span>
+        <i class="fas fa-chevron-right"></i>
+        <span class="report-topbar__breadcrumb-item is-active">Rapports d'avancement</span>
+      </div>
+    </div>
+
+    <div class="report-topbar__right">
+      <button class="report-btn report-btn--ghost" id="btnReadingMode" title="Mode lecture (focus)">
+        <i class="fas fa-book-open"></i>
+        <span>Lecture</span>
+      </button>
+      <button class="report-btn report-btn--ghost" id="btnExport" title="Exporter en PDF">
+        <i class="fas fa-file-pdf"></i>
+        <span>Exporter</span>
+      </button>
+      <button class="report-btn report-btn--primary" id="btnEditToggle" title="Modifier le contenu">
+        <i class="fas fa-pen"></i>
+        <span>Modifier</span>
+      </button>
+      <div class="report-menu">
+        <button class="report-btn report-btn--icon" id="btnMenu" title="Plus d'options">
+          <i class="fas fa-ellipsis-vertical"></i>
+        </button>
+        <div class="report-menu__dropdown" id="menuDropdown" hidden>
+          <button data-action="duplicate"><i class="fas fa-copy"></i> Dupliquer</button>
+          <button data-action="share"><i class="fas fa-link"></i> Copier le lien</button>
+          <button data-action="history"><i class="fas fa-clock-rotate-left"></i> Historique</button>
+          <hr>
+          <button data-action="reset" class="report-menu__danger"><i class="fas fa-rotate-left"></i> Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============= LAYOUT 2 COLONNES ============= -->
+  <div class="report-layout" id="reportLayout">
+
+    <!-- ============= MAIN ============= -->
+    <main class="report-main" id="reportMain">
+
+      <!-- HERO -->
+      <section class="report-hero">
+        <div class="report-hero__meta">
+          <span class="report-hero__period" id="reportPeriod">T2 2026 · Rapport mensuel</span>
+          <span class="report-hero__status report-hero__status--validated" id="reportStatus">
+            <i class="fas fa-circle-check"></i> Validé
+          </span>
+        </div>
+        <h1 class="report-hero__title" id="reportTitle">Rapport d'exécution du projet</h1>
+        <p class="report-hero__subtitle" id="reportSubtitle">Synthèse trimestrielle des avancées physiques et financières — avril à juin 2026</p>
+
+        <!-- Chronologie projet -->
+        <div class="report-timeline">
+          <div class="report-timeline__bar">
+            <div class="report-timeline__fill" id="timelineFill"></div>
+            <div class="report-timeline__cursor" id="timelineCursor">
+              <span class="report-timeline__cursor-dot"></span>
+              <span class="report-timeline__cursor-label">Aujourd'hui</span>
+            </div>
+          </div>
+          <div class="report-timeline__labels">
+            <span><strong id="tlStart">1 janv. 2020</strong></span>
+            <span class="report-timeline__progress-text" id="timelineText">— du calendrier projet écoulé</span>
+            <span><strong id="tlEnd">31 déc. 2027</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- KPIs uniformes -->
+      <section class="report-kpis" id="reportKpis"></section>
+
+      <!-- Sommaire (Table des matières) -->
+      <nav class="report-toc" id="reportToc">
+        <div class="report-toc__title">
+          <i class="fas fa-list"></i> Sommaire
+        </div>
+        <ol class="report-toc__list" id="tocList"></ol>
+        <button class="report-toc__add" id="btnAddSection" type="button">
+          <i class="fas fa-plus"></i> Ajouter une section
+        </button>
+      </nav>
+
+      <!-- Sections du rapport (contenu) -->
+      <article class="report-content" id="reportContent">
+        <!-- Sections injectées par JS -->
+      </article>
+
+      <!-- Métadonnées du rapport (footer) -->
+      <footer class="report-footer">
+        <div class="report-footer__people">
+          <div class="report-person">
+            <img id="authorAvatar" alt="Auteur">
+            <div>
+              <span class="report-person__role">Auteur</span>
+              <span class="report-person__name" id="authorName">—</span>
+              <small class="report-person__sub" id="authorRole">—</small>
+            </div>
+          </div>
+          <div class="report-person">
+            <img id="validatorAvatar" alt="Validateur">
+            <div>
+              <span class="report-person__role">Validateur</span>
+              <span class="report-person__name" id="validatorName">—</span>
+              <small class="report-person__sub" id="validatorRole">—</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-footer__meta">
+          <div class="report-meta-item">
+            <span class="report-meta-item__label">Version</span>
+            <span class="report-meta-item__value" id="reportVersion">1.3</span>
+          </div>
+          <div class="report-meta-item">
+            <span class="report-meta-item__label">Créé le</span>
+            <span class="report-meta-item__value" id="reportCreated">—</span>
+          </div>
+          <div class="report-meta-item">
+            <span class="report-meta-item__label">Modifié le</span>
+            <span class="report-meta-item__value" id="reportUpdated">—</span>
+          </div>
+        </div>
+
+        <div class="report-footer__tags" id="reportTags"></div>
+      </footer>
+    </main>
+
+    <!-- ============= SIDEBAR CONVERSATION ============= -->
+    <aside class="report-conv" id="reportConv">
+      <header class="report-conv__header">
+        <div class="report-conv__title">
+          <i class="fas fa-comments"></i>
+          <span>Conversation</span>
+          <span class="report-conv__count" id="convCount">0</span>
+        </div>
+        <button class="report-btn report-btn--icon" id="btnConvClose" title="Masquer">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </header>
+
+      <div class="report-conv__body" id="convBody">
+        <!-- Messages injectés par JS -->
+      </div>
+
+      <div class="report-conv__compose">
+        <div class="report-conv__compose-row">
+          <textarea id="convInput" placeholder="Écrire un commentaire... (Ctrl+Entrée pour envoyer)" rows="1"></textarea>
+          <button class="report-conv__send" id="btnSend" title="Envoyer">
+            <i class="fas fa-paper-plane"></i>
+            <span>Envoyer</span>
+          </button>
+        </div>
+        <div class="report-conv__compose-hint">
+          <i class="fas fa-circle-info"></i> Markdown basique supporté · Ctrl+Entrée pour envoyer
+        </div>
+      </div>
+    </aside>
+
+    <!-- Bouton flottant de réouverture quand sidebar masquée -->
+    <button class="report-conv-pin" id="btnConvOpen" hidden>
+      <i class="fas fa-comments"></i>
+      <span class="report-conv-pin__count" id="convPinCount">0</span>
+    </button>
+  </div>
+
+  <!-- ============= TOOLBAR ÉDITION (apparaît en mode édition) ============= -->
+  <div class="edit-toolbar" id="editToolbar" hidden>
+    <div class="edit-toolbar__group">
+      <button data-cmd="bold" title="Gras (Ctrl+B)"><i class="fas fa-bold"></i></button>
+      <button data-cmd="italic" title="Italique (Ctrl+I)"><i class="fas fa-italic"></i></button>
+      <button data-cmd="underline" title="Souligné"><i class="fas fa-underline"></i></button>
+    </div>
+    <div class="edit-toolbar__sep"></div>
+    <div class="edit-toolbar__group">
+      <button data-cmd="formatBlock" data-arg="h2" title="Titre"><i class="fas fa-heading"></i></button>
+      <button data-cmd="formatBlock" data-arg="blockquote" title="Citation"><i class="fas fa-quote-left"></i></button>
+      <button data-cmd="insertUnorderedList" title="Liste"><i class="fas fa-list-ul"></i></button>
+      <button data-cmd="insertOrderedList" title="Liste numérotée"><i class="fas fa-list-ol"></i></button>
+    </div>
+    <div class="edit-toolbar__sep"></div>
+    <div class="edit-toolbar__group">
+      <button data-cmd="callout" data-arg="info" title="Encadré info"><i class="fas fa-circle-info"></i> Info</button>
+      <button data-cmd="callout" data-arg="warning" title="Encadré attention"><i class="fas fa-triangle-exclamation"></i> Attention</button>
+      <button data-cmd="callout" data-arg="success" title="Encadré succès"><i class="fas fa-circle-check"></i> Succès</button>
+    </div>
+    <div class="edit-toolbar__sep"></div>
+    <div class="edit-toolbar__group">
+      <button data-cmd="exitBlock" title="Sortir de l'encadré / liste (Ctrl+Entrée)"><i class="fas fa-arrow-turn-down"></i> Sortir</button>
+    </div>
+    <div class="edit-toolbar__spacer"></div>
+    <button class="report-btn report-btn--ghost" id="btnEditCancel">
+      <i class="fas fa-xmark"></i> Annuler
+    </button>
+    <button class="report-btn report-btn--primary" id="btnEditSave">
+      <i class="fas fa-floppy-disk"></i> Enregistrer
+    </button>
+  </div>
+</div>
+
+<!-- Modal : créer / éditer une section -->
+<div class="pr-modal" id="sectionModal" hidden>
+  <div class="pr-modal__backdrop"></div>
+  <div class="pr-modal__dialog">
+    <div class="pr-modal__head">
+      <h3 id="sectionModalTitle">Nouvelle section</h3>
+      <button class="pr-modal__close" id="sectionModalClose" title="Fermer">
+        <i class="fas fa-xmark"></i>
+      </button>
+    </div>
+    <div class="pr-modal__body">
+      <div class="pr-field">
+        <label for="sectionTitleInput">Titre de la section</label>
+        <input type="text" id="sectionTitleInput" placeholder="Ex : Bilan budgétaire" autocomplete="off">
+      </div>
+      <div class="pr-field">
+        <label>Icône</label>
+        <div class="pr-icons" id="sectionIconGrid"></div>
+      </div>
+    </div>
+    <div class="pr-modal__actions">
+      <button class="report-btn report-btn--ghost" id="sectionModalCancel">Annuler</button>
+      <button class="report-btn report-btn--primary" id="sectionModalConfirm">
+        <i class="fas fa-check"></i> Créer la section
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="report-toast" id="toast" hidden>
+  <i class="fas fa-circle-check"></i>
+  <span id="toastText">OK</span>
+</div>
+
+<!-- Lightbox image -->
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox__close"><i class="fas fa-xmark"></i></button>
+  <img id="lightboxImg" alt="">
+  <div class="lightbox__caption" id="lightboxCaption"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="progress-report.js"></script>
+
+</body>
+</html>

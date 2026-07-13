@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord — Indicateurs</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="../../shared/css/components.css">
+<link rel="stylesheet" href="../../demo3/css/theme-soft.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+
+<div style="max-width:1480px;margin:0 auto;">
+
+  <header class="page-header">
+    <div class="page-header__title">
+      <a href="../../index.html" class="page-header__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Tableau de bord — Indicateurs</h1>
+        <p>Suivi détaillé des indicateurs de performance par niveau géographique</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="workspace">
+
+    <!-- ============= PANNEAU GAUCHE ============= -->
+    <aside class="indicator-panel">
+
+      <div class="indicator-panel__breadcrumb">
+        <i class="fas fa-folder"></i>
+        <strong>Projet DEMO</strong>
+        <i class="fas fa-chevron-right"></i>
+        <span>Cadre logique</span>
+        <i class="fas fa-chevron-right"></i>
+        <strong>Indicateur</strong>
+      </div>
+
+      <!-- Sélecteur Indicateur -->
+      <div class="selector">
+        <span class="selector__label">Indicateurs</span>
+        <button type="button" class="selector__trigger" id="indicatorTrigger">
+          <span id="indicatorTriggerLabel">%BENEF_DEMO – % Bénéficiaires</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="selector__dropdown" id="indicatorDropdown"></div>
+      </div>
+
+      <!-- Sélecteur Niveau géographique -->
+      <div class="selector">
+        <span class="selector__label">Niveau Géographique</span>
+        <button type="button" class="selector__trigger" id="geoTrigger">
+          <span id="geoTriggerLabel">Geography level 2 (Districts)</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="selector__dropdown" id="geoDropdown"></div>
+      </div>
+
+      <!-- Filtre Données validées -->
+      <label class="validated-filter">
+        <input type="checkbox" id="validatedToggle">
+        <span class="validated-filter__check"><i class="fas fa-check"></i></span>
+        <span class="validated-filter__text">
+          Données validées uniquement
+          <small>Masquer les indicateurs en cours de validation</small>
+        </span>
+      </label>
+
+      <!-- Métadonnées -->
+      <div class="metadata-grid">
+        <div class="metadata">
+          <span class="metadata__label">Unité</span>
+          <span class="metadata__value" id="metaUnit">%</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Type</span>
+          <span class="metadata__value" id="metaType">Cumulatif</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Sens</span>
+          <span class="metadata__direction metadata__direction--asc" id="metaDirection">
+            <i class="fas fa-arrow-up"></i> Doit augmenter
+          </span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Date Début</span>
+          <span class="metadata__value" id="metaStartDate">1 janv. 2011</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Date Fin</span>
+          <span class="metadata__value" id="metaEndDate">31 déc. 2020</span>
+        </div>
+        <div class="metadata metadata--vertical">
+          <span class="metadata__label">Définition</span>
+          <span class="metadata__value metadata__value--definition" id="metaDefinition"></span>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ============= COLONNE DROITE ============= -->
+    <div class="workspace-main">
+
+      <!-- 4 stat-cards -->
+      <div class="stat-row">
+        <div class="stat-card stat-card--reference">
+          <div class="stat-card__header">
+            <span class="stat-card__icon"><i class="fas fa-flag"></i></span>
+            <span class="stat-card__label">Référence</span>
+          </div>
+          <div class="stat-card__value">
+            <span id="statRefValue">0,8</span><span class="stat-card__suffix" id="statRefSuffix"> %</span>
+          </div>
+          <div class="stat-card__delta">Point de départ</div>
+        </div>
+
+        <div class="stat-card stat-card--current">
+          <div class="stat-card__header">
+            <span class="stat-card__icon"><i class="fas fa-bullseye-arrow"></i></span>
+            <span class="stat-card__label">Valeur actuelle</span>
+          </div>
+          <div class="stat-card__value">
+            <span id="statCurrentValue">30,0</span><span class="stat-card__suffix" id="statCurrentSuffix"> %</span>
+          </div>
+          <div class="stat-card__delta" id="statCurrentDelta">Valeur globale</div>
+        </div>
+
+        <div class="stat-card stat-card--target">
+          <div class="stat-card__header">
+            <span class="stat-card__icon"><i class="fas fa-flag-checkered"></i></span>
+            <span class="stat-card__label">Cible (fin de projet)</span>
+          </div>
+          <div class="stat-card__value">
+            <span id="statTargetValue">45,0</span><span class="stat-card__suffix" id="statTargetSuffix"> %</span>
+          </div>
+          <div class="stat-card__delta">Objectif final</div>
+        </div>
+
+        <div class="stat-card stat-card--progress">
+          <div class="stat-card__header">
+            <span class="stat-card__icon"><i class="fas fa-percent"></i></span>
+            <span class="stat-card__label">% atteint</span>
+          </div>
+          <div class="stat-card__value">
+            <span id="statProgressValue">66,2</span><span class="stat-card__suffix" id="statProgressSuffix"> %</span>
+          </div>
+          <div class="stat-card__delta">Vers la cible</div>
+        </div>
+      </div>
+
+      <!-- Progression vers la cible — par zone géographique -->
+      <div class="progress-card">
+        <div class="progress-card__header">
+          <div>
+            <h3>Progression de l'indicateur par rapport à la valeur cible finale</h3>
+            <div class="progress-card__sub" id="progressSub">Par zone géographique · classé par % atteint</div>
+          </div>
+          <span class="progress-card__pct-badge progress-card__pct-badge--mid" id="progressBadge">— %</span>
+        </div>
+        <div class="progress-card__body">
+          <div class="progress-bar-scale progress-bar-scale--top" id="progressScale"></div>
+          <div class="progress-rows" id="progressRows"></div>
+          <div class="progress-card__legend">
+            <div class="progress-card__legend-item">
+              <span class="progress-card__legend-dot progress-card__legend-dot--ref"></span>
+              Référence : <strong id="legendRefValue">—</strong>
+            </div>
+            <div class="progress-card__legend-item">
+              <span class="progress-card__legend-dot progress-card__legend-dot--current"></span>
+              Moyenne actuelle : <strong id="legendCurrentValue">—</strong>
+            </div>
+            <div class="progress-card__legend-item">
+              <span class="progress-card__legend-dot progress-card__legend-dot--target"></span>
+              Cible : <strong id="legendTargetValue">—</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Graphe d'évolution -->
+      <div class="chart-panel">
+        <div class="chart-panel__header">
+          <div>
+            <h3>Évolution de l'indicateur</h3>
+            <div class="chart-panel__sub" id="chartSub">Par zone géographique</div>
+          </div>
+        </div>
+        <div class="chart-panel__body">
+          <canvas id="indicatorChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="activity.js"></script>
+
+</body>
+</html>

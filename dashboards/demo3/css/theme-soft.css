@@ -1,0 +1,790 @@
+/* =========================================================
+   THÈME SOFT / EDITORIAL - Style Notion / Apple
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* === Couleurs primaires (bleu profond + sauge) === */
+  --primary: #137EB4;
+  --primary-dark: #0F6796;
+  --primary-light: #E5F1F8;
+  --primary-50: #F4FAFD;
+
+  /* === Sémantique pastel === */
+  --success: #7BA888;          /* sauge */
+  --success-light: #E8F0EA;
+  --warning: #D4A574;          /* moutarde doux */
+  --warning-light: #FAF1E4;
+  --danger: #C97B7B;           /* rosé poussé */
+  --danger-light: #FAEAEA;
+  --info: #8FAFC7;             /* bleu poudre */
+  --info-light: #ECF2F7;
+  --purple: #B39CC8;
+  --purple-light: #F1ECF7;
+
+  /* === Échelle de gris froide (bleutée) === */
+  --gray-50:  #F1F6F9;
+  --gray-100: #E4ECF2;
+  --gray-200: #D2DDE5;
+  --gray-300: #B5C2CC;
+  --gray-400: #8B9AA6;
+  --gray-500: #6A7884;
+  --gray-600: #4D5A65;
+  --gray-700: #364049;
+  --gray-800: #232B33;
+  --gray-900: #131A20;
+
+  /* === Surfaces === */
+  --bg-base: #F1F6F9;          /* fond gris-bleu très clair */
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F8FAFC;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  --shadow-sm: 0 2px 8px rgba(54,64,73,0.05);
+  --shadow-md: 0 8px 24px rgba(54,64,73,0.07);
+  --shadow-lg: 0 20px 50px rgba(54,64,73,0.09);
+
+  --transition: 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Fraunces', 'Georgia', serif;
+}
+
+body {
+  background: var(--bg-base);
+  background-image:
+    radial-gradient(circle at 20% 0%, rgba(19,126,180,0.04), transparent 50%),
+    radial-gradient(circle at 80% 100%, rgba(123,168,136,0.04), transparent 50%);
+  color: var(--gray-700);
+  letter-spacing: 0.005em;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 100px; border: 2px solid var(--bg-base); }
+
+.app {
+  max-width: 1380px;
+  gap: 32px;
+}
+
+/* =========================================================
+   TYPOGRAPHIE - Sérif sur les titres
+   ========================================================= */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* =========================================================
+   SIDEBAR - Style éditorial
+   ========================================================= */
+.sidebar {
+  background: var(--bg-surface);
+  border: 1px solid var(--gray-100);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-xl);
+}
+
+.sidebar__hero { height: 220px; }
+
+.sidebar__hero::after {
+  background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(31,27,20,0.7) 100%);
+}
+
+.sidebar__hero-badge {
+  background: rgba(255,255,255,0.95);
+  color: var(--success);
+  border: none;
+  font-family: var(--font);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 100px;
+}
+
+.sidebar__hero-badge::before { background: var(--success); }
+
+.sidebar__back {
+  background: rgba(255,255,255,0.95);
+  color: var(--gray-700);
+}
+
+.sidebar__back:hover {
+  background: #fff;
+  color: var(--primary);
+}
+
+.sidebar__hero-title h2 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+/* === Progression === */
+.sidebar__progress {
+  background: var(--primary-50);
+  border-bottom: 1px solid var(--gray-100);
+  padding: 18px 22px 16px;
+}
+
+.sidebar__progress-header {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+.sidebar__progress-pct {
+  color: var(--primary);
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sidebar__progress-bar { background: rgba(19,126,180,0.12); }
+
+.sidebar__progress-fill {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.sidebar__progress-fill::after { display: none; }
+
+/* === KPIs sidebar === */
+.sidebar__kpis {
+  background: var(--gray-100);
+  padding: 0;
+  gap: 1px;
+}
+
+.s-kpi { background: var(--bg-surface); padding: 18px 16px; }
+
+.s-kpi__label {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  color: var(--gray-500);
+  font-size: 11px;
+}
+
+.s-kpi__value {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+/* === Carte coût === */
+.cost-card {
+  margin: 12px;
+  padding: 22px;
+  background: linear-gradient(135deg, #137EB4 0%, #0F6796 100%);
+  border-radius: var(--radius-md);
+}
+
+.cost-card::before {
+  background: rgba(255,255,255,0.08);
+}
+
+.cost-card__label {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.cost-card__primary {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* === Sections accordéon === */
+.info-card { border-radius: var(--radius-sm); }
+.info-card:hover { background: var(--bg-elevated); }
+
+.info-card__icon {
+  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+}
+
+.info-card__icon--objective     { background: var(--primary-light); color: var(--primary); }
+.info-card__icon--beneficiaries { background: var(--warning-light); color: var(--warning); }
+.info-card__icon--zone          { background: var(--success-light); color: var(--success); }
+.info-card__icon--funding       { background: var(--purple-light); color: var(--purple); }
+
+.info-card__title {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--gray-700);
+}
+
+.info-card__content {
+  color: var(--gray-600);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.tag {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  color: var(--gray-700);
+  padding: 5px 12px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.tag:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+/* === Milestones === */
+.milestones-card {
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+  margin: 0 12px 14px;
+  padding: 18px 20px 12px;
+}
+
+.milestones-card__title {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--gray-700);
+}
+
+.milestones-card__title i { color: var(--primary); }
+
+.milestones-card__title-count {
+  background: var(--bg-surface);
+  color: var(--gray-600);
+}
+
+.milestone__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.milestone__date { color: var(--gray-500); }
+.milestone__date strong { color: var(--gray-700); }
+
+.milestone__status {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  padding: 3px 10px;
+  font-size: 11px;
+}
+
+.milestone--done-on   .milestone__status { background: var(--success-light); color: var(--success); }
+.milestone--done-late .milestone__status { background: var(--warning-light); color: var(--warning); }
+.milestone--overdue   .milestone__status { background: var(--danger-light); color: var(--danger); }
+.milestone--upcoming  .milestone__status { background: var(--gray-100); color: var(--gray-600); }
+
+.milestone--done-on   .milestone__dot { background: var(--success); }
+.milestone--done-late .milestone__dot { background: var(--warning); }
+.milestone--overdue   .milestone__dot { background: var(--danger); }
+.milestone--upcoming  .milestone__dot { background: var(--gray-400); }
+
+/* =========================================================
+   ONGLETS
+   ========================================================= */
+.tabs {
+  background: var(--bg-surface);
+  border: 1px solid var(--gray-100);
+  border-radius: 100px;
+  padding: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.tab {
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.005em;
+  color: var(--gray-500);
+}
+
+.tab:hover { color: var(--gray-800); background: var(--gray-50); }
+
+.tab.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(19,126,180,0.25);
+}
+
+/* =========================================================
+   KPI CARDS - éditorial
+   ========================================================= */
+.kpi-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--gray-100);
+  border-left: none;
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-card:hover {
+  border-color: var(--gray-200);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+/* Bordure colorée subtile en haut au lieu de gauche */
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 3px;
+  border-radius: 0 0 100px 100px;
+  background: var(--primary);
+  opacity: 0.7;
+}
+
+.kpi-card--success::after { background: var(--success); }
+.kpi-card--warning::after { background: var(--warning); }
+.kpi-card--danger::after  { background: var(--danger); }
+.kpi-card--gradient::after { display: none; }
+
+.kpi-card--gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border: none;
+}
+
+.kpi-card__label {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+.kpi-card__value {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+
+.kpi-card__icon {
+  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.kpi-card--success .kpi-card__icon { background: var(--success-light); color: var(--success); }
+.kpi-card--warning .kpi-card__icon { background: var(--warning-light); color: var(--warning); }
+.kpi-card--danger  .kpi-card__icon { background: var(--danger-light); color: var(--danger); }
+
+.kpi-card__trend { color: var(--gray-500); font-size: 13px; }
+.trend-up { color: var(--success); }
+.trend-down { color: var(--danger); }
+
+/* =========================================================
+   CARTES GÉNÉRIQUES
+   ========================================================= */
+.chart-card, .table-card, .plan-card, .perf-card, .evo-card,
+.indicators-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-card { padding: 28px 32px; }
+
+.card-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.card-header h3 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gray-900);
+  letter-spacing: -0.01em;
+}
+
+.card-header p { color: var(--gray-500); font-size: 14px; margin-top: 4px; }
+
+.chart-card__header { padding-bottom: 20px; border-bottom-color: var(--gray-100); }
+
+.chart-card__title-area h3 {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--gray-900);
+  letter-spacing: -0.02em;
+}
+
+.chart-card__meta {
+  color: var(--gray-500);
+  font-size: 13px;
+}
+
+.chart-card__meta strong { color: var(--gray-700); font-weight: 500; }
+
+/* === TOGGLES === */
+.view-toggle, .period-toggle {
+  background: var(--gray-50);
+  border-radius: 100px;
+  padding: 4px;
+}
+
+.view-toggle label, .period-toggle label {
+  font-weight: 500;
+  color: var(--gray-500);
+  border-radius: 100px;
+}
+
+.view-toggle input:checked + label,
+.period-toggle input:checked + label {
+  background: var(--bg-surface);
+  color: var(--gray-900);
+  box-shadow: 0 2px 6px rgba(54,64,73,0.08);
+}
+
+/* === SEARCH === */
+.search-box i { color: var(--gray-400); }
+
+.search-box input {
+  background: var(--bg-base);
+  border-color: var(--gray-200);
+  color: var(--gray-700);
+  border-radius: 100px;
+  padding: 12px 14px 12px 38px;
+}
+
+.search-box input::placeholder { color: var(--gray-400); }
+
+.search-box input:focus {
+  border-color: var(--primary);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 4px rgba(19,126,180,0.1);
+}
+
+/* === BOUTONS === */
+.btn-icon {
+  background: var(--bg-base);
+  border-color: var(--gray-200);
+  color: var(--gray-600);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.btn-icon:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.btn-action {
+  background: var(--bg-base);
+  border-color: var(--gray-200);
+  color: var(--gray-700);
+  border-radius: 100px;
+  padding: 10px 18px;
+  font-weight: 500;
+}
+
+.btn-action:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.btn-action--primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(19,126,180,0.25);
+}
+
+.btn-action--primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow: 0 6px 16px rgba(19,126,180,0.3);
+}
+
+/* === CHECKBOX TOGGLE === */
+.checkbox-toggle {
+  background: var(--bg-base);
+  border-color: var(--gray-200);
+  color: var(--gray-600);
+  border-radius: 100px;
+}
+
+.checkbox-toggle input { accent-color: var(--primary); }
+
+/* =========================================================
+   ONGLET INDICATEURS
+   ========================================================= */
+.indicators-panel__header { padding: 20px 22px; }
+
+.indicators-panel__title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+.indicator-count {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.indicators-list { padding: 12px; }
+
+.indicator-item {
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  border-left: none;
+  position: relative;
+}
+
+.indicator-item:hover { background: var(--gray-50); }
+
+.indicator-item.active {
+  background: var(--primary-50);
+  border-left: none;
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.indicator-item__code {
+  background: var(--gray-100);
+  color: var(--gray-700);
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.indicator-item.active .indicator-item__code {
+  background: var(--primary);
+  color: #fff;
+}
+
+.indicator-item__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-800);
+  line-height: 1.45;
+}
+
+.indicator-item__values { color: var(--gray-500); font-size: 12px; }
+.indicator-item__values strong { color: var(--gray-700); font-weight: 500; }
+
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-warning { background: var(--warning-light); color: var(--warning); }
+.badge-danger  { background: var(--danger-light); color: var(--danger); }
+.badge-neutral { background: var(--gray-100); color: var(--gray-500); }
+
+/* === STAT BLOCKS === */
+.stat-block {
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+
+.stat-block__label {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+.stat-block__value {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--gray-900);
+}
+
+.stat-block--current { background: var(--primary-light); }
+.stat-block--current .stat-block__value { color: var(--primary); }
+.stat-block--target { background: var(--success-light); }
+.stat-block--target .stat-block__value { color: var(--success); }
+.stat-block--progress { background: var(--warning-light); }
+.stat-block--progress .stat-block__value { color: var(--warning); }
+
+/* =========================================================
+   TABLEAUX
+   ========================================================= */
+.data-table thead th {
+  background: var(--gray-50);
+  color: var(--gray-500);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  font-size: 12px;
+  border-bottom-color: var(--gray-100);
+  padding: 14px 22px;
+}
+
+.data-table thead th i { color: var(--gray-400); }
+.data-table thead th.sortable:hover { background: var(--gray-100); color: var(--gray-700); }
+
+.data-table tbody td {
+  color: var(--gray-700);
+  border-bottom-color: var(--gray-100);
+  padding: 18px 22px;
+  font-size: 14px;
+}
+
+.data-table tbody tr:hover { background: var(--primary-50); }
+
+.data-table tfoot td {
+  background: var(--gray-50);
+  color: var(--gray-900);
+  font-weight: 600;
+  border-top-color: var(--gray-200);
+}
+
+.evo-table .locality {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* === BARRES DE PROGRESSION (pastel) === */
+.progress-cell__bar {
+  background: var(--gray-100);
+  height: 8px;
+}
+
+.progress-cell--right .progress-cell__bar { height: 10px; }
+
+.progress-cell__fill--high { background: var(--success); }
+.progress-cell__fill--mid  { background: var(--warning); }
+.progress-cell__fill--low  { background: var(--danger); }
+
+.progress-cell--gradient .progress-cell__fill--high { background: linear-gradient(90deg, var(--success) 0%, #94BBA0 100%); }
+.progress-cell--gradient .progress-cell__fill--mid  { background: linear-gradient(90deg, var(--warning) 0%, #DEB68A 100%); }
+.progress-cell--gradient .progress-cell__fill--low  { background: linear-gradient(90deg, var(--danger) 0%, #DA9494 100%); }
+
+.progress-cell__pct {
+  color: var(--gray-700);
+  font-weight: 600;
+  font-family: var(--font-serif);
+}
+
+/* =========================================================
+   ONGLET ACTIVITÉS
+   ========================================================= */
+.donut-block { padding: 32px; }
+
+.donut-block + .donut-block { border-left-color: var(--gray-100); }
+
+.donut-block__title {
+  font-family: var(--font-serif);
+  text-transform: none;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--gray-700);
+  margin-bottom: 20px;
+}
+
+.donut-center__value {
+  font-family: var(--font-serif);
+  font-size: 38px;
+  font-weight: 600;
+  color: var(--gray-900);
+  letter-spacing: -0.02em;
+}
+
+.donut-center__label {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  color: var(--gray-500);
+}
+
+.legend-item:hover { background: var(--gray-50); }
+.legend-item__label { color: var(--gray-700); font-weight: 500; }
+.legend-item__count { background: var(--gray-50); color: var(--gray-600); }
+
+/* === Pills années === */
+.year-pill {
+  background: var(--bg-surface);
+  border-color: var(--gray-200);
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+.year-pill:hover { border-color: var(--primary); color: var(--primary); }
+
+.year-pill.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(19,126,180,0.25);
+}
+
+/* === Synthèse année === */
+.year-summary { background: var(--gray-100); }
+.summary-cell { background: var(--bg-surface); padding: 18px 22px; }
+
+.summary-cell__label {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  color: var(--gray-500);
+  font-size: 12px;
+}
+
+.summary-cell__value {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--gray-900);
+}
+
+.delta-up { background: var(--success-light); color: var(--success); }
+.delta-down { background: var(--danger-light); color: var(--danger); }
+
+/* =========================================================
+   ONGLET FINANCIER
+   ========================================================= */
+.source-center__label {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  color: var(--gray-500);
+}
+
+.source-center__value {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--gray-900);
+}
+
+.source-center__sub { color: var(--gray-500); }
+.source-name { color: var(--gray-900); font-weight: 500; }

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord Activités</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="../../shared/css/components.css">
+<link rel="stylesheet" href="../../demo3/css/theme-soft.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+
+<div style="max-width:1480px;margin:0 auto;">
+
+  <header class="page-header">
+    <div class="page-header__title">
+      <a href="../../index.html" class="page-header__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Tableau de bord — Activités</h1>
+        <p>Suivi détaillé des activités du projet par niveau géographique</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="workspace">
+
+    <!-- =================================================
+         PANNEAU GAUCHE - Sélecteurs + métadonnées
+         ================================================= -->
+    <aside class="activity-panel">
+
+      <div class="activity-panel__breadcrumb">
+        <i class="fas fa-folder"></i>
+        <strong>Projet DEMO</strong>
+        <i class="fas fa-chevron-right"></i>
+        <span>Composante 1</span>
+        <i class="fas fa-chevron-right"></i>
+        <strong>Activité</strong>
+      </div>
+
+      <!-- Sélecteur Activité -->
+      <div class="selector">
+        <span class="selector__label">Activités</span>
+        <button type="button" class="selector__trigger" id="activityTrigger">
+          <span id="activityTriggerLabel">GA0101 – Well rehabilitation</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="selector__dropdown" id="activityDropdown"></div>
+      </div>
+
+      <!-- Sélecteur Niveau Géographique -->
+      <div class="selector">
+        <span class="selector__label">Niveau Géographique</span>
+        <button type="button" class="selector__trigger" id="geoTrigger">
+          <span id="geoTriggerLabel">Geography level 2 (Districts)</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="selector__dropdown" id="geoDropdown"></div>
+      </div>
+
+      <!-- Métadonnées -->
+      <div class="metadata-grid">
+        <div class="metadata">
+          <span class="metadata__label">Unité</span>
+          <span class="metadata__value" id="metaUnit">EXISTINSTN</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Responsable</span>
+          <span class="metadata__value" id="metaResponsible">CREDO2: M&E Specialist</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Date Début</span>
+          <span class="metadata__value" id="metaStartDate">2 févr. 2011</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Date Fin</span>
+          <span class="metadata__value" id="metaEndDate">14 déc. 2015</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Statut</span>
+          <span class="metadata__value metadata__value--status" id="metaStatus">En cours</span>
+        </div>
+      </div>
+
+      <!-- Drill-down région sélectionnée -->
+      <div class="region-panel is-hidden" id="regionPanel">
+        <div class="region-panel__header">
+          <div class="region-panel__icon"><i class="fas fa-location-dot"></i></div>
+          <div class="region-panel__title">
+            <span class="region-panel__label">Région sélectionnée</span>
+            <span class="region-panel__name" id="regionPanelName">—</span>
+          </div>
+          <button class="region-panel__close" id="regionPanelClose" title="Désélectionner">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+        <div class="region-panel__kpis">
+          <div class="region-panel__kpi region-panel__kpi--budget">
+            <span class="region-panel__kpi-label">Budget</span>
+            <span class="region-panel__kpi-value" id="regionPanelBudget">—</span>
+          </div>
+          <div class="region-panel__kpi region-panel__kpi--physique">
+            <span class="region-panel__kpi-label">Physique</span>
+            <span class="region-panel__kpi-value" id="regionPanelPhysique">—</span>
+          </div>
+          <div class="region-panel__kpi region-panel__kpi--achievement">
+            <span class="region-panel__kpi-label">Achèvement</span>
+            <span class="region-panel__kpi-value" id="regionPanelAchievement">—</span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- =================================================
+         COLONNE DROITE - Gauges + Graphe + Carte
+         ================================================= -->
+    <div class="workspace-main">
+
+      <!-- Bandeau Gauges -->
+      <div class="gauges-card">
+        <div class="gauges-card__header">
+          <div class="gauges-card__title">
+            <h3>Performance de l'activité</h3>
+            <p id="gaugesSubtitle">Indicateurs clés au niveau géographique sélectionné</p>
+          </div>
+        </div>
+
+        <div class="gauges-row">
+          <div class="gauge" id="gaugeBudget"></div>
+          <div class="gauge" id="gaugePhysique"></div>
+          <div class="gauge" id="gaugeAchievement"></div>
+        </div>
+      </div>
+
+      <!-- Graphe + Carte côte à côte -->
+      <div class="bottom-grid">
+
+        <!-- GRAPHE -->
+        <div class="chart-panel">
+          <div class="panel-header">
+            <div>
+              <h3>Évolution annuelle</h3>
+              <div class="panel-header__sub">% Budget vs % Physique</div>
+            </div>
+          </div>
+          <div class="year-pills-row" id="yearPillsRow"></div>
+          <div class="panel-body">
+            <canvas id="activityChart"></canvas>
+          </div>
+        </div>
+
+        <!-- CARTE -->
+        <div class="map-panel">
+          <div class="panel-header">
+            <div>
+              <h3>Répartition géographique</h3>
+              <div class="panel-header__sub">% Achèvement par région</div>
+            </div>
+          </div>
+          <div class="panel-body" style="padding:0;height:420px;position:relative;">
+            <div id="map" class="map-container"></div>
+            <div class="map-loading" id="mapLoading">
+              <div class="map-loading__spinner"></div>
+              <p>Chargement de la carte...</p>
+            </div>
+            <div class="map-legend">
+              <div class="map-legend__title">% Achèvement</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#0F6796"></span> 80 — 100%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#137EB4"></span> 60 — 80%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#5BA3CB"></span> 40 — 60%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#9DC8E0"></span> 20 — 40%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#D5E5EE"></span> 0 — 20%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Commentaires -->
+      <div class="comments-card">
+        <div class="comments-card__icon"><i class="fas fa-comment"></i></div>
+        <div class="comments-card__body">
+          <div class="comments-card__label">Commentaires</div>
+          <p class="comments-card__text" id="comments"></p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script src="activity.js"></script>
+
+</body>
+</html>

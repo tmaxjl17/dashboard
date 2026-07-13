@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mes tableaux de bord</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="shared/css/tokens.css">
+<link rel="stylesheet" href="shared/css/components.css">
+<link rel="stylesheet" href="shared/css/home.css">
+</head>
+<body>
+
+<div class="home">
+
+  <header class="home__header">
+    <div class="home__title">
+      <h1><i class="fas fa-chart-pie"></i> Mes tableaux de bord</h1>
+      <p>Sélectionnez un projet pour visualiser ses indicateurs et activités</p>
+    </div>
+    <div class="home__search search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Rechercher un tableau de bord..." id="searchDash">
+    </div>
+  </header>
+
+  <!-- ============= DASHBOARDS PRÉDÉFINIS ============= -->
+  <div class="home__section-header">
+    <div class="home__section-title">
+      <span class="home__section-title__icon" style="background:linear-gradient(135deg,#2196F3,#1976D2)">
+        <i class="fas fa-grip"></i>
+      </span>
+      <div>
+        <h2>Tableaux de bord prédéfinis</h2>
+        <p>Modèles prêts à l'emploi pour vos projets</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid" id="dashboardGrid"></div>
+
+  <!-- ============= DASHBOARDS PERSONNALISÉS ============= -->
+  <div class="home__section-header">
+    <div class="home__section-title">
+      <span class="home__section-title__icon">
+        <i class="fas fa-wand-magic-sparkles"></i>
+      </span>
+      <div>
+        <h2>Mes dashboards personnalisés</h2>
+        <p>Composez vos propres vues à partir de widgets</p>
+      </div>
+    </div>
+    <a href="studio/index.html" class="home__section-cta">
+      <i class="fas fa-plus"></i> Nouveau dashboard
+    </a>
+  </div>
+
+  <div class="custom-grid" id="customGrid"></div>
+
+</div>
+
+<script src="dashboards.js"></script>
+<script>
+(function() {
+  const grid = document.getElementById('dashboardGrid');
+  const customGrid = document.getElementById('customGrid');
+  const searchInput = document.getElementById('searchDash');
+
+  const STORAGE_KEY = 'dashboard_studio_v1';
+
+  function calcProgress(start, end) {
+    const s = new Date(start), e = new Date(end), now = new Date();
+    if (now < s) return 0;
+    if (now > e) return 100;
+    return Math.round(((now - s) / (e - s)) * 100);
+  }
+
+  function fmtRelative(iso) {
+    if (!iso) return 'Jamais';
+    const d = new Date(iso), now = new Date();
+    const diff = (now - d) / 1000; // sec
+    if (diff < 60) return 'À l\'instant';
+    if (diff < 3600) return `Il y a ${Math.floor(diff / 60)} min`;
+    if (diff < 86400) return `Il y a ${Math.floor(diff / 3600)} h`;
+    if (diff < 86400 * 7) return `Il y a ${Math.floor(diff / 86400)} j`;
+    return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function loadCustomIndex() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY + '.index');
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  }
+
+  function deleteCustom(id) {
+    localStorage.removeItem(STORAGE_KEY + '.' + id);
+    const idx = loadCustomIndex().filter(d => d.id !== id);
+    localStorage.setItem(STORAGE_KEY + '.index', JSON.stringify(idx));
+    renderCustom();
+  }
+
+  // === Render dashboards prédéfinis ===
+  function render(filter = '') {
+    const filtered = DASHBOARDS.filter(d =>
+      d.title.toLowerCase().includes(filter.toLowerCase()) ||
+      d.subtitle.toLowerCase().includes(filter.toLowerCase()) ||
+      (d.location || '').toLowerCase().includes(filter.toLowerCase())
+    );
+
+    let html = filtered.map(d => {
+      const progress = calcProgress(d.startDate, d.endDate);
+      return `
+        <a href="dashboards/${d.slug}/index.html" class="dash-card">
+          <div class="dash-card__cover">
+            <img src="${d.cover}" alt="${d.title}">
+            <span class="dash-card__status dash-card__status--${d.status}">${d.statusLabel}</span>
+          </div>
+          <div class="dash-card__body">
+            <h3 class="dash-card__title">${d.title}</h3>
+            <p class="dash-card__subtitle"><i class="fas fa-map-marker-alt"></i> ${d.location}</p>
+
+            <div class="dash-card__kpis">
+              <div class="dash-card__kpi">
+                <div class="dash-card__kpi-value">${d.kpis.indicators}</div>
+                <div class="dash-card__kpi-label">Indicateurs</div>
+              </div>
+              <div class="dash-card__kpi">
+                <div class="dash-card__kpi-value">${d.kpis.activities}</div>
+                <div class="dash-card__kpi-label">Activités</div>
+              </div>
+              <div class="dash-card__kpi">
+                <div class="dash-card__kpi-value">${d.kpis.sources}</div>
+                <div class="dash-card__kpi-label">Sources</div>
+              </div>
+            </div>
+
+            <div class="dash-card__progress">
+              <div class="dash-card__progress-header">
+                <span>Avancement</span>
+                <span class="dash-card__progress-pct">${progress}%</span>
+              </div>
+              <div class="dash-card__progress-bar">
+                <div class="dash-card__progress-fill" style="width:${progress}%"></div>
+              </div>
+            </div>
+
+            <div class="dash-card__footer">
+              <span><i class="far fa-clock"></i> Maj. ${d.lastUpdate}</span>
+              <span class="dash-card__cta">Ouvrir <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </div>
+        </a>
+      `;
+    }).join('');
+
+    if (filtered.length === 0) {
+      html = `<div class="empty-state">
+        <i class="fas fa-folder-open"></i>
+        <p>Aucun tableau de bord trouvé pour « ${filter} »</p>
+      </div>`;
+    }
+
+    grid.innerHTML = html;
+  }
+
+  // === Render dashboards personnalisés ===
+  function renderCustom() {
+    const list = loadCustomIndex();
+
+    if (list.length === 0) {
+      customGrid.innerHTML = `
+        <div class="custom-empty">
+          <div class="custom-empty__icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+          <h3>Aucun dashboard personnalisé</h3>
+          <p>Créez votre premier dashboard sur mesure : choisissez vos widgets, configurez la source de données, ajustez les couleurs.</p>
+          <a href="studio/index.html" class="home__section-cta">
+            <i class="fas fa-plus"></i> Créer mon premier dashboard
+          </a>
+        </div>`;
+      return;
+    }
+
+    const cards = list.map(d => `
+      <a href="studio/index.html?id=${d.id}" class="custom-card">
+        <div class="custom-card__head">
+          <span class="custom-card__icon"><i class="fas fa-shapes"></i></span>
+          <span class="custom-card__title">${escapeHtml(d.name || 'Sans titre')}</span>
+          <button class="custom-card__menu" data-delete="${d.id}" data-name="${escapeAttr(d.name)}" title="Supprimer">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        <div class="custom-card__meta">
+          <span class="custom-card__meta-item"><i class="fas fa-shapes"></i> ${d.widgetsCount || 0} widget${d.widgetsCount > 1 ? 's' : ''}</span>
+          <span class="custom-card__meta-item"><i class="far fa-clock"></i> ${fmtRelative(d.updatedAt)}</span>
+        </div>
+        <div class="custom-card__footer">
+          <span><i class="fas fa-user"></i> Personnel</span>
+          <span class="custom-card__cta">Ouvrir <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+    `).join('');
+
+    const newCard = `
+      <a href="studio/index.html" class="custom-card--new">
+        <div>
+          <div class="custom-card--new__icon"><i class="fas fa-plus"></i></div>
+          <h3>Nouveau dashboard</h3>
+          <p>Créer un dashboard personnalisé</p>
+        </div>
+      </a>`;
+
+    customGrid.innerHTML = cards + newCard;
+
+    // Bind delete handlers (stop propagation pour pas suivre le lien)
+    customGrid.querySelectorAll('[data-delete]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault(); e.stopPropagation();
+        const id = btn.dataset.delete;
+        const name = btn.dataset.name;
+        if (confirm(`Supprimer le dashboard « ${name} » ? Cette action est irréversible.`)) {
+          deleteCustom(id);
+        }
+      });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+  function escapeAttr(s) { return String(s ?? '').replace(/"/g, '&quot;'); }
+
+  searchInput.addEventListener('input', e => render(e.target.value));
+  render();
+  renderCustom();
+})();
+</script>
+
+</body>
+</html>

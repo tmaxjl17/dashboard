@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio — Tableau de bord personnalisé</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../shared/css/tokens.css">
+<link rel="stylesheet" href="studio.css">
+</head>
+<body class="studio-body">
+
+<div class="studio" id="studio">
+
+  <!-- ============= TOPBAR ============= -->
+  <header class="studio-topbar">
+    <div class="studio-topbar__left">
+      <a href="../index.html" class="studio-back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="studio-name">
+        <input type="text" id="dashName" class="studio-name__input" value="Mon dashboard" placeholder="Nom du dashboard">
+        <span class="studio-name__edit-hint"><i class="fas fa-pen"></i></span>
+      </div>
+      <span class="studio-saved" id="savedIndicator">
+        <i class="fas fa-check"></i> Enregistré
+      </span>
+    </div>
+
+    <div class="studio-topbar__center">
+      <div class="studio-mode-toggle" role="tablist">
+        <button class="studio-mode-toggle__btn is-active" data-mode="edit" id="modeEdit">
+          <i class="fas fa-pen-ruler"></i> Édition
+        </button>
+        <button class="studio-mode-toggle__btn" data-mode="preview" id="modePreview">
+          <i class="fas fa-eye"></i> Aperçu
+        </button>
+      </div>
+    </div>
+
+    <div class="studio-topbar__right">
+      <button class="studio-btn studio-btn--ghost" id="btnDuplicate" title="Dupliquer">
+        <i class="fas fa-copy"></i>
+      </button>
+      <button class="studio-btn studio-btn--ghost" id="btnDelete" title="Supprimer">
+        <i class="fas fa-trash"></i>
+      </button>
+      <button class="studio-btn studio-btn--primary" id="btnSave">
+        <i class="fas fa-floppy-disk"></i> Enregistrer
+      </button>
+    </div>
+  </header>
+
+  <!-- ============= LAYOUT 3 COLONNES ============= -->
+  <div class="studio-layout">
+
+    <!-- ============= PALETTE GAUCHE ============= -->
+    <aside class="palette" id="palette">
+      <div class="palette__section">
+        <h3 class="palette__title"><i class="fas fa-shapes"></i> Widgets</h3>
+        <p class="palette__hint">Cliquez pour ajouter au canvas</p>
+        <div class="palette__list" id="paletteWidgets"></div>
+      </div>
+
+      <div class="palette__section">
+        <h3 class="palette__title"><i class="fas fa-wand-magic-sparkles"></i> Templates</h3>
+        <p class="palette__hint">Démarrer depuis un modèle</p>
+        <div class="palette__templates" id="paletteTemplates"></div>
+      </div>
+
+      <div class="palette__footer">
+        <small><i class="fas fa-circle-info"></i> Les modifications sont enregistrées automatiquement dans votre navigateur.</small>
+      </div>
+    </aside>
+
+    <!-- ============= CANVAS CENTRAL ============= -->
+    <main class="canvas-wrap">
+
+      <!-- Canvas (grille widgets) -->
+      <div class="canvas" id="canvas">
+        <!-- empty state OU widgets injectés ici -->
+      </div>
+    </main>
+
+    <!-- ============= INSPECTOR DROIT ============= -->
+    <aside class="inspector" id="inspector">
+      <div class="inspector__empty" id="inspectorEmpty">
+        <i class="fas fa-arrow-pointer"></i>
+        <h4>Aucun widget sélectionné</h4>
+        <p>Cliquez sur un widget du canvas pour le configurer ici, ou ajoutez-en un depuis la palette.</p>
+      </div>
+      <div class="inspector__body" id="inspectorBody" hidden></div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- Modal de confirmation -->
+<div class="modal" id="modal" hidden>
+  <div class="modal__backdrop"></div>
+  <div class="modal__dialog">
+    <h3 class="modal__title" id="modalTitle">Confirmer ?</h3>
+    <p class="modal__body" id="modalBody"></p>
+    <div class="modal__actions">
+      <button class="studio-btn studio-btn--ghost" id="modalCancel">Annuler</button>
+      <button class="studio-btn studio-btn--danger" id="modalConfirm">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" hidden>
+  <i class="fas fa-circle-check"></i>
+  <span id="toastText">OK</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Charge les indicateurs depuis l'app pour servir de source de données -->
+<script src="../dashboards/indicateurs/data.js"></script>
+<script src="studio.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord Activités — Storytelling</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="../../shared/css/components.css">
+<link rel="stylesheet" href="../../demo3/css/theme-soft.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+
+<div class="story">
+
+  <!-- ============= HEADER ============= -->
+  <header class="page-header">
+    <div class="page-header__title">
+      <a href="../../index.html" class="page-header__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Activités du projet</h1>
+        <p>Vue narrative — sélectionnez une activité pour explorer ses indicateurs</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============= HERO CARD ============= -->
+  <section class="hero-card">
+
+    <div class="hero-card__top">
+      <div class="hero-card__breadcrumb">
+        <i class="fas fa-folder"></i>
+        <strong>Projet DEMO</strong>
+        <i class="fas fa-chevron-right"></i>
+        <span>Composante 1</span>
+        <i class="fas fa-chevron-right"></i>
+        <strong>Activité</strong>
+      </div>
+      <span class="hero-card__status" id="heroStatus" data-status="En cours">En cours</span>
+    </div>
+
+    <div class="hero-card__code" id="heroCode">GA0101</div>
+    <h2 class="hero-card__title" id="heroTitle">Well rehabilitation</h2>
+
+    <!-- Sélecteurs en pills -->
+    <div class="hero-selectors">
+      <div class="hero-selector">
+        <button type="button" class="hero-selector__trigger" id="activityTrigger">
+          <span class="hero-selector__icon"><i class="fas fa-list-check"></i></span>
+          <div class="hero-selector__content">
+            <span class="hero-selector__label">Activité</span>
+            <span class="hero-selector__value" id="activityValue">GA0101 – Well rehabilitation</span>
+          </div>
+          <i class="fas fa-chevron-down hero-selector__chevron"></i>
+        </button>
+        <div class="hero-selector__dropdown" id="activityDropdown"></div>
+      </div>
+
+      <div class="hero-selector">
+        <button type="button" class="hero-selector__trigger" id="geoTrigger">
+          <span class="hero-selector__icon"><i class="fas fa-map-location-dot"></i></span>
+          <div class="hero-selector__content">
+            <span class="hero-selector__label">Niveau géographique</span>
+            <span class="hero-selector__value" id="geoValue">Geography level 2 (Districts)</span>
+          </div>
+          <i class="fas fa-chevron-down hero-selector__chevron"></i>
+        </button>
+        <div class="hero-selector__dropdown" id="geoDropdown"></div>
+      </div>
+    </div>
+
+    <!-- Métadonnées en pills -->
+    <div class="hero-meta">
+      <div class="hero-meta__pill" id="metaUnit"></div>
+      <div class="hero-meta__pill" id="metaResponsible"></div>
+      <div class="hero-meta__pill" id="metaStartDate"></div>
+      <div class="hero-meta__pill" id="metaEndDate"></div>
+    </div>
+
+    <!-- Commentaires repliables -->
+    <div class="hero-comments is-open" id="commentsCard">
+      <div class="hero-comments__toggle">
+        <i class="fas fa-chevron-right"></i>
+        <span>Commentaires de l'activité</span>
+      </div>
+      <div class="hero-comments__body">
+        <div class="hero-comments__content" id="heroComments"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============= SECTION KPI ============= -->
+  <div class="section-title">
+    <div class="section-title__icon"><i class="fas fa-gauge-high"></i></div>
+    <div>
+      <h2>Performance de l'activité</h2>
+      <p>Au niveau géographique sélectionné</p>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi" id="kpiBudget"></div>
+    <div class="kpi" id="kpiPhysique"></div>
+    <div class="kpi" id="kpiAchievement"></div>
+  </div>
+
+  <!-- ============= SECTION GÉOGRAPHIE ============= -->
+  <div class="section-title">
+    <div class="section-title__icon"><i class="fas fa-map"></i></div>
+    <div>
+      <h2>Répartition géographique</h2>
+      <p>Cliquez sur une région ou une carte pour zoomer</p>
+    </div>
+  </div>
+
+  <div class="map-section">
+
+    <!-- CARTE -->
+    <div class="map-card">
+      <div class="map-card__header">
+        <div>
+          <h3>Carte choroplèthe</h3>
+          <div class="map-card__sub">% Achèvement par région</div>
+        </div>
+      </div>
+      <div class="map-card__body">
+        <div id="map" class="map-container"></div>
+        <div class="map-loading" id="mapLoading">
+          <div class="map-loading__spinner"></div>
+          <p>Chargement de la carte...</p>
+        </div>
+        <div class="map-legend">
+          <div class="map-legend__title">% Achèvement</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#0F6796"></span> 80 — 100%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#137EB4"></span> 60 — 80%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#5BA3CB"></span> 40 — 60%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#9DC8E0"></span> 20 — 40%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#D5E5EE"></span> 0 — 20%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRILL-DOWN -->
+    <div class="drill-card">
+      <div class="drill-card__header">
+        <div>
+          <h3>Régions classées</h3>
+          <div class="drill-card__sub">Triées par % Achèvement · <span id="drillCount">0</span> régions</div>
+        </div>
+      </div>
+      <div class="drill-card__body" id="drillList"></div>
+    </div>
+
+  </div>
+
+  <!-- ============= SECTION GRAPHE ============= -->
+  <div class="section-title">
+    <div class="section-title__icon"><i class="fas fa-chart-line"></i></div>
+    <div>
+      <h2>Évolution annuelle</h2>
+      <p>Comparaison % Budget vs % Physique</p>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="year-pills-row" id="yearPillsRow"></div>
+    <div class="chart-section__body">
+      <canvas id="activityChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script src="activity.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Map Explorer — Projet DEMO</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="map-explorer.css">
+</head>
+<body class="map-body">
+
+<div class="map-app" id="mapApp">
+
+  <!-- ============= TOPBAR ============= -->
+  <header class="map-topbar">
+    <div class="map-topbar__left">
+      <a href="../../index.html" class="map-topbar__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="map-topbar__title">
+        <h1>Map Explorer</h1>
+        <p>Visualisation cartographique multi-couches · Côte d'Ivoire</p>
+      </div>
+    </div>
+    <div class="map-topbar__right">
+      <button class="map-btn map-btn--ghost" id="btnExportPng" title="Exporter en PNG">
+        <i class="fas fa-camera"></i><span>PNG</span>
+      </button>
+      <button class="map-btn map-btn--ghost" id="btnShare" title="Partager">
+        <i class="fas fa-link"></i><span>Partager</span>
+      </button>
+      <button class="map-btn map-btn--ghost" id="btnHelp" title="Aide">
+        <i class="fas fa-question"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============= CARTE PLEIN ÉCRAN ============= -->
+  <div id="map" class="map-canvas"></div>
+
+  <!-- ============= LOADING ============= -->
+  <div class="map-loader" id="mapLoader">
+    <div class="map-loader__spinner"></div>
+    <p>Chargement de la carte...</p>
+  </div>
+
+  <!-- ============= PANNEAU GAUCHE : FILTRES + DÉTAILS ============= -->
+  <aside class="map-panel map-panel--left" id="panelLeft">
+    <div class="map-panel__header">
+      <div class="map-panel__title">
+        <i class="fas fa-sliders"></i>
+        <span>Filtres & données</span>
+      </div>
+      <button class="map-panel__toggle" id="btnTogglePanelLeft" title="Réduire/agrandir">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+
+    <div class="map-panel__body">
+
+      <!-- Sélecteur indicateur -->
+      <div class="mp-field">
+        <label>Indicateur</label>
+        <button type="button" class="mp-selector" id="indicatorTrigger">
+          <span class="mp-selector__icon"><i class="fas fa-chart-line"></i></span>
+          <span class="mp-selector__content">
+            <span class="mp-selector__code" id="indicatorCode">—</span>
+            <span class="mp-selector__name" id="indicatorName">—</span>
+          </span>
+          <i class="fas fa-chevron-down mp-selector__chevron"></i>
+        </button>
+        <div class="mp-dropdown" id="indicatorDropdown" hidden></div>
+      </div>
+
+      <!-- Sélecteur niveau géographique -->
+      <div class="mp-field">
+        <label>Niveau géographique</label>
+        <button type="button" class="mp-selector" id="geoTrigger">
+          <span class="mp-selector__icon"><i class="fas fa-location-dot"></i></span>
+          <span class="mp-selector__content">
+            <span class="mp-selector__name" id="geoName">—</span>
+          </span>
+          <i class="fas fa-chevron-down mp-selector__chevron"></i>
+        </button>
+        <div class="mp-dropdown" id="geoDropdown" hidden></div>
+      </div>
+
+      <!-- Toggle données validées -->
+      <label class="mp-toggle">
+        <input type="checkbox" id="validatedToggle">
+        <span class="mp-toggle__sw"></span>
+        <span class="mp-toggle__text">Données validées uniquement</span>
+      </label>
+
+      <!-- Séparateur -->
+      <div class="mp-divider">
+        <span class="mp-divider__line"></span>
+        <span class="mp-divider__label" id="scopeLabel">Vue nationale</span>
+        <span class="mp-divider__line"></span>
+      </div>
+
+      <!-- Bouton retour vue nationale (visible si région sélectionnée) -->
+      <button class="mp-back-btn" id="btnClearSelection" hidden>
+        <i class="fas fa-arrow-left"></i> Retour vue nationale
+      </button>
+
+      <!-- KPIs adaptatifs -->
+      <div class="mp-kpis">
+        <div class="mp-kpi mp-kpi--ref">
+          <span class="mp-kpi__label">Référence</span>
+          <span class="mp-kpi__value"><strong id="kpiRef">—</strong><small id="kpiRefUnit"></small></span>
+        </div>
+        <div class="mp-kpi mp-kpi--current">
+          <span class="mp-kpi__label">Actuelle</span>
+          <span class="mp-kpi__value"><strong id="kpiCurrent">—</strong><small id="kpiCurrentUnit"></small></span>
+        </div>
+        <div class="mp-kpi mp-kpi--target">
+          <span class="mp-kpi__label">Cible</span>
+          <span class="mp-kpi__value"><strong id="kpiTarget">—</strong><small id="kpiTargetUnit"></small></span>
+        </div>
+        <div class="mp-kpi mp-kpi--progress">
+          <span class="mp-kpi__label">% Atteint</span>
+          <span class="mp-kpi__value"><strong id="kpiProgress">—</strong><small>%</small></span>
+        </div>
+      </div>
+
+      <!-- Mini barre de progression -->
+      <div class="mp-progress">
+        <div class="mp-progress__bar">
+          <div class="mp-progress__fill" id="progressFill"></div>
+          <div class="mp-progress__target-line" id="progressTargetLine"></div>
+        </div>
+        <div class="mp-progress__legend">
+          <span>0%</span>
+          <span>50%</span>
+          <span>100%</span>
+        </div>
+      </div>
+
+      <!-- Métadonnées -->
+      <div class="mp-meta">
+        <div class="mp-meta__item">
+          <span class="mp-meta__label">Sens</span>
+          <span class="mp-meta__value" id="metaDirection">—</span>
+        </div>
+        <div class="mp-meta__item">
+          <span class="mp-meta__label">Type</span>
+          <span class="mp-meta__value" id="metaType">—</span>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ============= PANNEAU DROIT : COUCHES ============= -->
+  <aside class="map-panel map-panel--right" id="panelRight">
+    <div class="map-panel__header">
+      <div class="map-panel__title">
+        <i class="fas fa-layer-group"></i>
+        <span>Couches</span>
+      </div>
+      <button class="map-panel__toggle" id="btnTogglePanelRight" title="Réduire/agrandir">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="map-panel__body">
+
+      <!-- Onglets Fond / Données -->
+      <div class="mp-tabs">
+        <button class="mp-tab is-active" data-tab="layers">
+          <i class="fas fa-bullseye"></i> Données
+        </button>
+        <button class="mp-tab" data-tab="basemap">
+          <i class="fas fa-map"></i> Fond de carte
+        </button>
+      </div>
+
+      <!-- Pane Données -->
+      <div class="mp-tab-pane is-active" data-pane="layers">
+
+        <!-- INDICATEURS -->
+        <div class="mp-layer-group">
+          <div class="mp-layer-group__title"><i class="fas fa-bullseye"></i> Indicateurs projet</div>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="choro" checked>
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--polygon" style="--c:#137EB4"></span>
+            <span class="mp-layer__name">Choroplèthe % atteint</span>
+            <span class="mp-layer__count" id="choroCount">—</span>
+          </label>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="markers">
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--pin" style="--c:#2196F3"></span>
+            <span class="mp-layer__name">Marqueurs régions</span>
+            <span class="mp-layer__count" id="markersCount">—</span>
+          </label>
+        </div>
+
+        <!-- DONNÉES TERRAIN -->
+        <div class="mp-layer-group">
+          <div class="mp-layer-group__title"><i class="fas fa-people-group"></i> Données terrain</div>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="beneficiaires">
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--pin-dot" style="--c:#06B6D4; --d:#0E7490"></span>
+            <span class="mp-layer__name">Bénéficiaires</span>
+            <span class="mp-layer__count">2 410</span>
+          </label>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="health">
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--pin" style="--c:#10B981"></span>
+            <span class="mp-layer__name">Centres de santé</span>
+            <span class="mp-layer__count">18</span>
+          </label>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="roads">
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--line" style="--c:#EF4444"></span>
+            <span class="mp-layer__name">Pistes PDAC</span>
+            <span class="mp-layer__count">5</span>
+          </label>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="villages">
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--dot" style="--c:#8B5CF6"></span>
+            <span class="mp-layer__name">Villages couverts</span>
+            <span class="mp-layer__count">42</span>
+          </label>
+        </div>
+
+        <!-- RÉFÉRENCE -->
+        <div class="mp-layer-group">
+          <div class="mp-layer-group__title"><i class="fas fa-map"></i> Référence</div>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="labels" checked>
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--text">Aa</span>
+            <span class="mp-layer__name">Étiquettes régions</span>
+          </label>
+          <label class="mp-layer">
+            <input type="checkbox" data-layer="boundaries" checked>
+            <span class="mp-layer__check"></span>
+            <span class="mp-layer__marker mp-layer__marker--border" style="--c:#94A3B8"></span>
+            <span class="mp-layer__name">Limites administratives</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Pane Fond de carte -->
+      <div class="mp-tab-pane" data-pane="basemap">
+        <div class="mp-basemaps">
+          <button class="mp-basemap is-selected" data-basemap="light">
+            <span class="mp-basemap__thumb mp-basemap__thumb--light"></span>
+            <span>Clair</span>
+          </button>
+          <button class="mp-basemap" data-basemap="dark">
+            <span class="mp-basemap__thumb mp-basemap__thumb--dark"></span>
+            <span>Sombre</span>
+          </button>
+          <button class="mp-basemap" data-basemap="satellite">
+            <span class="mp-basemap__thumb mp-basemap__thumb--sat"></span>
+            <span>Satellite</span>
+          </button>
+          <button class="mp-basemap" data-basemap="terrain">
+            <span class="mp-basemap__thumb mp-basemap__thumb--terrain"></span>
+            <span>Terrain</span>
+          </button>
+          <button class="mp-basemap" data-basemap="streets">
+            <span class="mp-basemap__thumb mp-basemap__thumb--streets"></span>
+            <span>Routes</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ============= RECHERCHE FLOTTANTE TOP CENTER ============= -->
+  <div class="map-search">
+    <i class="fas fa-magnifying-glass"></i>
+    <input type="text" id="searchInput" placeholder="Rechercher une région... (ex: Lacs)" autocomplete="off">
+    <button class="map-search__locate" id="btnLocate" title="Ma position">
+      <i class="fas fa-location-crosshairs"></i>
+    </button>
+    <div class="map-search__results" id="searchResults" hidden></div>
+  </div>
+
+  <!-- ============= OUTILS BOTTOM-RIGHT ============= -->
+  <div class="map-tools">
+    <button class="map-tool" id="btnZoomIn" title="Zoom +"><i class="fas fa-plus"></i></button>
+    <button class="map-tool" id="btnZoomOut" title="Zoom -"><i class="fas fa-minus"></i></button>
+    <button class="map-tool" id="btnResetView" title="Vue nationale"><i class="fas fa-arrows-to-circle"></i></button>
+    <button class="map-tool" id="btnFullscreen" title="Plein écran"><i class="fas fa-expand"></i></button>
+  </div>
+
+  <!-- ============= LÉGENDE BOTTOM-LEFT ============= -->
+  <div class="map-legend" id="mapLegend">
+    <div class="map-legend__title">
+      <span id="legendTitle">% atteint</span>
+    </div>
+    <div class="map-legend__gradient" id="legendGradient"></div>
+    <div class="map-legend__scale" id="legendScale"></div>
+  </div>
+
+  <!-- ============= TOOLTIP région flottant (au survol) ============= -->
+  <!-- géré par Leaflet bindTooltip -->
+
+</div>
+
+<!-- Toast -->
+<div class="map-toast" id="toast" hidden>
+  <i class="fas fa-circle-check"></i>
+  <span id="toastText">OK</span>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Données partagées : 5 indicateurs + GeoJSON CIV niveaux 0/1/2 -->
+<script src="../indicateurs/data.js"></script>
+<script src="map-explorer.js"></script>
+
+</body>
+</html>

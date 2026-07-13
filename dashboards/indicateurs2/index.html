@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indicateurs — Race vers l'objectif</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="../../shared/css/components.css">
+<link rel="stylesheet" href="../../demo3/css/theme-soft.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+
+<div class="race-app">
+
+  <header class="page-header">
+    <div class="page-header__title">
+      <a href="../../index.html" class="page-header__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Indicateurs — Race vers l'objectif</h1>
+        <p>Suivez l'avancée de chaque indicateur vers sa cible finale</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRE DE CONTRÔLES -->
+  <div class="race-controls">
+    <div class="race-controls__selectors">
+      <div class="r-selector">
+        <button type="button" class="r-selector__trigger" id="indicatorTrigger">
+          <span class="r-selector__icon"><i class="fas fa-chart-line"></i></span>
+          <div class="r-selector__content">
+            <span class="r-selector__label">Indicateur</span>
+            <span class="r-selector__value" id="indicatorValue">%BENEF_DEMO – % Bénéficiaires</span>
+          </div>
+          <i class="fas fa-chevron-down r-selector__chevron"></i>
+        </button>
+        <div class="r-selector__dropdown" id="indicatorDropdown"></div>
+      </div>
+      <div class="r-selector">
+        <button type="button" class="r-selector__trigger" id="geoTrigger">
+          <span class="r-selector__icon"><i class="fas fa-map-location-dot"></i></span>
+          <div class="r-selector__content">
+            <span class="r-selector__label">Niveau géographique</span>
+            <span class="r-selector__value" id="geoValue">Geography level 2 (Districts)</span>
+          </div>
+          <i class="fas fa-chevron-down r-selector__chevron"></i>
+        </button>
+        <div class="r-selector__dropdown" id="geoDropdown"></div>
+      </div>
+    </div>
+    <label class="r-validated">
+      <input type="checkbox" id="validatedToggle">
+      <span class="r-validated__check"><i class="fas fa-check"></i></span>
+      <span class="r-validated__text">Données validées uniquement</span>
+    </label>
+  </div>
+
+  <!-- HERO : cercle géant + identité + statut -->
+  <section class="hero hero--high" id="hero">
+    <div class="hero-circle">
+      <svg class="hero-circle__svg" viewBox="0 0 200 200">
+        <circle class="hero-circle__track" cx="100" cy="100" r="92" fill="none" stroke-width="14"/>
+        <circle class="hero-circle__fill" id="heroCircleFill" cx="100" cy="100" r="92" stroke-width="14"/>
+      </svg>
+      <div class="hero-circle__center">
+        <div class="hero-circle__pct">
+          <span id="heroCirclePct">0</span><span class="hero-circle__pct-suffix">%</span>
+        </div>
+        <div class="hero-circle__sub">vers la cible</div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="hero-info__code">
+        <span id="heroCode">%BENEF_DEMO</span>
+        <span class="hero-info__validated-badge" id="heroValidatedBadge">
+          <i class="fas fa-circle-check"></i> Validé
+        </span>
+      </div>
+      <h2 class="hero-info__title" id="heroTitle">% Bénéficiaires</h2>
+      <p class="hero-info__definition" id="heroDefinition"></p>
+      <div class="hero-info__meta" id="heroMeta"></div>
+    </div>
+
+    <div class="hero-status hero-status--on-track" id="heroStatus">
+      <i class="fas fa-circle-check hero-status__icon"></i>
+      <div class="hero-status__label">À l'heure</div>
+      <div class="hero-status__desc">Pile sur la trajectoire</div>
+    </div>
+  </section>
+
+  <!-- RACE TRACK -->
+  <section class="race-card">
+    <div class="race-card__header">
+      <div class="race-card__title">
+        <div class="race-card__title-icon"><i class="fas fa-flag-checkered"></i></div>
+        <div>
+          <h2>Course vers la cible</h2>
+          <div class="race-card__sub">Position actuelle entre la valeur de référence et l'objectif final</div>
+        </div>
+      </div>
+      <div class="race-card__scope" id="raceScope">
+        <i class="fas fa-globe"></i> Niveau global
+      </div>
+    </div>
+
+    <div class="race-track" id="raceTrack">
+      <div class="race-track__line"></div>
+      <div class="race-track__line-progress race-track__line-progress--high" id="raceLineProgress" style="width:0%"></div>
+
+      <!-- Drapeau de départ -->
+      <div class="race-flag race-flag--start">
+        <div class="race-flag__label">Départ</div>
+        <div class="race-flag__icon"><i class="fas fa-flag"></i></div>
+        <div class="race-flag__value" id="raceFlagStartValue">—</div>
+      </div>
+
+      <!-- Marqueur fantôme -->
+      <div class="race-ghost" id="raceGhost">
+        <div class="race-ghost__line"></div>
+        <div class="race-ghost__bubble" id="raceGhostBubble">Cible aujourd'hui</div>
+      </div>
+
+      <!-- Pin actuel -->
+      <div class="race-pin race-pin--high" id="racePin" style="left:60px">
+        <div class="race-pin__bubble">
+          <span class="race-pin__bubble-label">Position actuelle</span>
+          <span id="racePinValue">0%</span>
+        </div>
+        <div class="race-pin__dot"></div>
+      </div>
+
+      <!-- Drapeau d'arrivée -->
+      <div class="race-flag race-flag--end">
+        <div class="race-flag__label">Cible</div>
+        <div class="race-flag__icon"><i class="fas fa-flag-checkered"></i></div>
+        <div class="race-flag__value" id="raceFlagEndValue">—</div>
+      </div>
+    </div>
+
+    <div class="race-scale">
+      <div class="race-scale__item">0%</div>
+      <div class="race-scale__item">25%</div>
+      <div class="race-scale__item">50%</div>
+      <div class="race-scale__item">75%</div>
+      <div class="race-scale__item">100%</div>
+    </div>
+  </section>
+
+  <!-- ÉVOLUTION avec corridor -->
+  <section class="evo-card">
+    <div class="evo-card__header">
+      <div>
+        <h3>Évolution de l'indicateur</h3>
+        <div class="evo-card__sub" id="evoSub">Par zone géographique</div>
+      </div>
+      <div class="evo-card__legend">
+        <div class="evo-card__legend-item"><span class="evo-card__legend-dot evo-card__legend-dot--actual"></span> Valeur relevée</div>
+        <div class="evo-card__legend-item"><span class="evo-card__legend-dot evo-card__legend-dot--target"></span> Trajectoire cible</div>
+        <div class="evo-card__legend-item"><span class="evo-card__legend-dot evo-card__legend-dot--corridor"></span> Corridor de tolérance</div>
+      </div>
+    </div>
+    <div class="evo-card__body">
+      <canvas id="evoChart"></canvas>
+    </div>
+  </section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="activity.js"></script>
+
+</body>
+</html>

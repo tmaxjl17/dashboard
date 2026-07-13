@@ -1,0 +1,586 @@
+/* =========================================================
+   THÈME DARK PRO - Surcharge des tokens et composants
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+:root {
+  /* === Couleurs primaires (cyan néon) === */
+  --primary: #06B6D4;
+  --primary-dark: #0891B2;
+  --primary-light: rgba(6,182,212,0.15);
+  --primary-50: rgba(6,182,212,0.08);
+
+  /* === Accents secondaires === */
+  --accent: #A855F7;          /* violet néon */
+  --accent-light: rgba(168,85,247,0.15);
+  --accent-soft: rgba(168,85,247,0.08);
+
+  /* === Sémantique (saturé pour contraste sur fond dark) === */
+  --success: #10B981;
+  --success-light: rgba(16,185,129,0.15);
+  --warning: #F59E0B;
+  --warning-light: rgba(245,158,11,0.15);
+  --danger: #F43F5E;
+  --danger-light: rgba(244,63,94,0.15);
+  --info: #3B82F6;
+  --purple: #A855F7;
+  --purple-light: rgba(168,85,247,0.15);
+
+  /* === Échelle de gris INVERSÉE pour dark === */
+  --gray-50:  #0F172A;   /* le "blanc" devient le fond le plus sombre */
+  --gray-100: #1E293B;   /* surface élevée 1 */
+  --gray-200: #334155;   /* bordures */
+  --gray-300: #475569;
+  --gray-400: #64748B;   /* placeholder */
+  --gray-500: #94A3B8;   /* texte secondaire */
+  --gray-600: #CBD5E1;
+  --gray-700: #E2E8F0;
+  --gray-800: #F1F5F9;
+  --gray-900: #F8FAFC;   /* texte primaire (ex-noir) */
+
+  /* === Surfaces === */
+  --bg-base: #020617;          /* fond le plus sombre (body) */
+  --bg-surface: #0F172A;       /* cartes */
+  --bg-elevated: #1E293B;      /* cartes hover, popups */
+  --border: rgba(148,163,184,0.12);
+  --border-strong: rgba(148,163,184,0.2);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.6);
+  --glow-primary: 0 0 20px rgba(6,182,212,0.3);
+  --glow-accent: 0 0 20px rgba(168,85,247,0.3);
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Monaco', monospace;
+}
+
+/* === BODY : fond animé subtil === */
+body {
+  background: var(--bg-base);
+  color: var(--gray-700);
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 10% 0%,  rgba(6,182,212,0.08), transparent 50%),
+    radial-gradient(ellipse 600px 500px at 90% 100%, rgba(168,85,247,0.08), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app { position: relative; z-index: 1; }
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 100px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+/* =========================================================
+   SIDEBAR - glassmorphism dark
+   ========================================================= */
+.sidebar {
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+.sidebar__hero::after {
+  background: linear-gradient(180deg, rgba(2,6,23,0) 30%, rgba(2,6,23,0.95) 100%);
+}
+
+.sidebar__hero-badge {
+  background: rgba(15,23,42,0.85);
+  border: 1px solid rgba(16,185,129,0.4);
+  color: var(--success);
+  box-shadow: 0 0 12px rgba(16,185,129,0.3);
+}
+
+.sidebar__back {
+  background: rgba(15,23,42,0.85);
+  border: 1px solid var(--border);
+  color: var(--gray-700);
+}
+
+.sidebar__back:hover {
+  background: var(--bg-elevated);
+  color: var(--primary);
+  box-shadow: var(--glow-primary);
+}
+
+.sidebar__hero-title h2 { color: #fff; }
+
+.sidebar__progress {
+  background: rgba(6,182,212,0.05);
+  border-color: var(--border);
+}
+
+.sidebar__progress-pct {
+  color: var(--primary);
+  font-family: var(--font-mono);
+}
+
+.sidebar__progress-bar {
+  background: var(--bg-base);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.sidebar__progress-fill {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  box-shadow: 0 0 12px rgba(6,182,212,0.5);
+}
+
+.sidebar__kpis {
+  background: var(--border);
+}
+
+.s-kpi {
+  background: var(--bg-surface);
+}
+
+.s-kpi__value {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* === Coût en carte gradient néon === */
+.cost-card {
+  background: linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(168,85,247,0.15) 100%);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--glow-primary);
+}
+
+.cost-card::before {
+  background: radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%);
+}
+
+.cost-card__primary {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--font-mono);
+}
+
+.cost-card__label, .cost-card__secondary { color: var(--gray-600); }
+
+/* === Sections accordéon === */
+.info-card:hover { background: var(--bg-elevated); }
+
+.info-card__icon--objective     { background: rgba(6,182,212,0.15); color: var(--primary); }
+.info-card__icon--beneficiaries { background: rgba(245,158,11,0.15); color: var(--warning); }
+.info-card__icon--zone          { background: rgba(16,185,129,0.15); color: var(--success); }
+.info-card__icon--funding       { background: rgba(168,85,247,0.15); color: var(--accent); }
+
+.info-card__title { color: var(--gray-700); }
+.info-card__content { color: var(--gray-500); }
+
+.tag {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--gray-600);
+}
+
+.tag:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 8px rgba(6,182,212,0.3);
+}
+
+/* === MILESTONES === */
+.milestones-card {
+  background: rgba(15,23,42,0.5);
+  border: 1px solid var(--border);
+}
+
+.milestones-card__title { color: var(--gray-700); }
+.milestones-card__title i { color: var(--primary); }
+.milestones-card__title-count {
+  background: var(--bg-elevated);
+  color: var(--gray-600);
+  font-family: var(--font-mono);
+}
+
+.milestone-list::before {
+  background: linear-gradient(to bottom, var(--border-strong), var(--border));
+}
+
+.milestone + .milestone { border-top-color: var(--border); }
+.milestone__name { color: var(--gray-800); }
+.milestone__date { color: var(--gray-500); }
+.milestone__date strong { color: var(--gray-700); }
+
+.milestone__dot { border-color: var(--bg-surface); }
+.milestone--done-on   .milestone__dot { background: var(--success); box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+.milestone--done-late .milestone__dot { background: var(--warning); box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+.milestone--overdue   .milestone__dot { background: var(--danger);  box-shadow: 0 0 8px rgba(244,63,94,0.5); }
+.milestone--upcoming  .milestone__dot { background: var(--gray-400); }
+
+/* =========================================================
+   ONGLETS
+   ========================================================= */
+.tabs {
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.tab { color: var(--gray-500); }
+.tab:hover { color: var(--gray-700); background: var(--bg-elevated); }
+
+.tab.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: #fff;
+  box-shadow: var(--glow-primary);
+}
+
+/* =========================================================
+   KPI CARDS - effet glow au hover
+   ========================================================= */
+.kpi-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 50%, rgba(6,182,212,0.05) 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.kpi-card:hover::before { opacity: 1; }
+.kpi-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md), var(--glow-primary); }
+
+.kpi-card--success { border-left-color: var(--success); }
+.kpi-card--success:hover { box-shadow: var(--shadow-md), 0 0 20px rgba(16,185,129,0.25); }
+.kpi-card--warning { border-left-color: var(--warning); }
+.kpi-card--warning:hover { box-shadow: var(--shadow-md), 0 0 20px rgba(245,158,11,0.25); }
+.kpi-card--danger { border-left-color: var(--danger); }
+.kpi-card--danger:hover { box-shadow: var(--shadow-md), 0 0 20px rgba(244,63,94,0.25); }
+
+.kpi-card--gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  box-shadow: var(--glow-primary);
+}
+
+.kpi-card__label { color: var(--gray-500); }
+.kpi-card__value {
+  color: var(--gray-900);
+  font-family: var(--font-mono);
+}
+
+.kpi-card__icon { background: var(--primary-light); color: var(--primary); }
+.kpi-card--success .kpi-card__icon { background: var(--success-light); color: var(--success); }
+.kpi-card--warning .kpi-card__icon { background: var(--warning-light); color: var(--warning); }
+.kpi-card--danger  .kpi-card__icon { background: var(--danger-light); color: var(--danger); }
+
+.kpi-card__trend { color: var(--gray-500); }
+.trend-up { color: var(--success); }
+.trend-down { color: var(--danger); }
+
+/* =========================================================
+   CARTES GÉNÉRIQUES (chart-card, plan-card, etc.)
+   ========================================================= */
+.chart-card, .table-card, .plan-card, .perf-card, .evo-card,
+.indicators-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.card-header { border-bottom-color: var(--border); }
+.card-header h3 { color: var(--gray-900); }
+.card-header p { color: var(--gray-500); }
+
+.chart-card__header { border-bottom-color: var(--border); }
+.chart-card__title-area h3 { color: var(--gray-900); }
+.chart-card__meta { color: var(--gray-500); }
+.chart-card__meta strong { color: var(--gray-700); }
+
+/* === TOGGLES === */
+.view-toggle, .period-toggle {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+}
+
+.view-toggle label, .period-toggle label { color: var(--gray-500); }
+
+.view-toggle input:checked + label,
+.period-toggle input:checked + label {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--glow-primary);
+}
+
+/* === SEARCH === */
+.search-box i { color: var(--gray-400); }
+
+.search-box input {
+  background: var(--bg-base);
+  border-color: var(--border);
+  color: var(--gray-700);
+}
+
+.search-box input::placeholder { color: var(--gray-400); }
+
+.search-box input:focus {
+  border-color: var(--primary);
+  background: var(--bg-base);
+  box-shadow: 0 0 0 3px rgba(6,182,212,0.15);
+}
+
+/* === BOUTONS === */
+.btn-icon {
+  background: var(--bg-base);
+  border-color: var(--border);
+  color: var(--gray-500);
+}
+
+.btn-icon:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: var(--glow-primary);
+}
+
+.btn-action {
+  background: var(--bg-base);
+  border-color: var(--border);
+  color: var(--gray-700);
+}
+
+.btn-action:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.btn-action--primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  color: #fff;
+  box-shadow: var(--glow-primary);
+}
+
+.btn-action--primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #9333EA 100%);
+  color: #fff;
+}
+
+/* === CHECKBOX TOGGLE === */
+.checkbox-toggle {
+  background: var(--bg-base);
+  border-color: var(--border);
+  color: var(--gray-600);
+}
+
+.checkbox-toggle:hover { border-color: var(--primary); background: var(--primary-light); }
+
+/* =========================================================
+   ONGLET INDICATEURS
+   ========================================================= */
+.indicators-panel__header { border-bottom-color: var(--border); }
+.indicators-panel__title { color: var(--gray-900); }
+
+.indicator-count {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-family: var(--font-mono);
+}
+
+.indicator-item:hover { background: var(--bg-elevated); }
+
+.indicator-item.active {
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+}
+
+.indicator-item__code {
+  background: var(--bg-base);
+  color: var(--gray-600);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+}
+
+.indicator-item.active .indicator-item__code {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.indicator-item__name { color: var(--gray-800); }
+.indicator-item__values { color: var(--gray-500); }
+.indicator-item__values strong { color: var(--gray-700); font-family: var(--font-mono); }
+
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-warning { background: var(--warning-light); color: var(--warning); }
+.badge-danger  { background: var(--danger-light); color: var(--danger); }
+.badge-neutral { background: var(--bg-base); color: var(--gray-500); }
+
+/* === STAT BLOCKS === */
+.stat-block {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+}
+
+.stat-block__label { color: var(--gray-500); }
+.stat-block__value {
+  color: var(--gray-900);
+  font-family: var(--font-mono);
+}
+
+.stat-block--current {
+  background: var(--primary-light);
+  border-color: rgba(6,182,212,0.3);
+}
+.stat-block--current .stat-block__value { color: var(--primary); }
+
+.stat-block--target {
+  background: var(--success-light);
+  border-color: rgba(16,185,129,0.3);
+}
+.stat-block--target .stat-block__value { color: var(--success); }
+
+.stat-block--progress {
+  background: var(--accent-light);
+  border-color: rgba(168,85,247,0.3);
+}
+.stat-block--progress .stat-block__value { color: var(--accent); }
+
+/* =========================================================
+   TABLEAUX
+   ========================================================= */
+.data-table thead th {
+  background: var(--bg-base);
+  color: var(--gray-500);
+  border-bottom-color: var(--border);
+}
+
+.data-table thead th.sortable:hover { background: var(--bg-elevated); color: var(--gray-700); }
+.data-table thead th i { color: var(--gray-400); }
+
+.data-table tbody td {
+  color: var(--gray-700);
+  border-bottom-color: var(--border);
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tbody td.text-right { font-family: var(--font-mono); }
+
+.data-table tbody tr:hover { background: var(--primary-50); }
+
+.data-table tfoot td {
+  background: var(--bg-base);
+  color: var(--gray-900);
+  border-top-color: var(--primary);
+  border-top-width: 2px;
+  font-family: var(--font-mono);
+}
+
+.evo-table .locality {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* === BARRES DE PROGRESSION === */
+.progress-cell__bar {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+}
+
+.progress-cell__fill--high { background: linear-gradient(90deg, var(--success) 0%, #34D399 100%); box-shadow: 0 0 8px rgba(16,185,129,0.4); }
+.progress-cell__fill--mid  { background: linear-gradient(90deg, var(--warning) 0%, #FBBF24 100%); box-shadow: 0 0 8px rgba(245,158,11,0.4); }
+.progress-cell__fill--low  { background: linear-gradient(90deg, var(--danger) 0%, #FB7185 100%);  box-shadow: 0 0 8px rgba(244,63,94,0.4); }
+
+.progress-cell__pct {
+  color: var(--gray-700);
+  font-family: var(--font-mono);
+}
+
+/* =========================================================
+   ONGLET ACTIVITÉS
+   ========================================================= */
+.donut-block + .donut-block { border-left-color: var(--border); }
+.donut-block__title { color: var(--gray-500); }
+.donut-center__value { color: var(--gray-900); font-family: var(--font-mono); }
+.donut-center__label { color: var(--gray-500); }
+
+.legend-item:hover { background: var(--bg-elevated); }
+.legend-item__label { color: var(--gray-700); }
+.legend-item__count {
+  background: var(--bg-base);
+  color: var(--gray-600);
+  font-family: var(--font-mono);
+}
+
+/* === Pills années === */
+.year-pills { border-bottom-color: var(--border); }
+
+.year-pill {
+  background: var(--bg-base);
+  border-color: var(--border);
+  color: var(--gray-500);
+}
+
+.year-pill:hover { border-color: var(--primary); color: var(--primary); }
+
+.year-pill.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: none;
+  color: #fff;
+  box-shadow: var(--glow-primary);
+}
+
+/* === Synthèse année === */
+.year-summary {
+  background: var(--border);
+  border-bottom-color: var(--border);
+}
+
+.summary-cell { background: var(--bg-surface); }
+.summary-cell__label { color: var(--gray-500); }
+.summary-cell__value { color: var(--gray-900); font-family: var(--font-mono); }
+
+.delta-up { background: var(--success-light); color: var(--success); }
+.delta-down { background: var(--danger-light); color: var(--danger); }
+
+/* =========================================================
+   ONGLET FINANCIER
+   ========================================================= */
+.source-center__label { color: var(--gray-500); }
+.source-center__value {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--font-mono);
+}
+.source-center__sub { color: var(--gray-500); }
+
+.source-name { color: var(--gray-900); }
+
+/* =========================================================
+   TYPOGRAPHIE NEON sur certains éléments
+   ========================================================= */
+.kpi-card--gradient .kpi-card__value {
+  text-shadow: 0 0 20px rgba(255,255,255,0.5);
+}

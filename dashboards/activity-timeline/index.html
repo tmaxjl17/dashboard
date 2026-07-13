@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord Activités — Timeline narrative</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="../../shared/css/components.css">
+<link rel="stylesheet" href="../../demo3/css/theme-soft.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+
+<div class="tl-app">
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <div class="page-header__title">
+      <a href="../../index.html" class="page-header__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Activités du projet — Timeline</h1>
+        <p>Faites défiler le temps avec le curseur ou lancez la lecture animée</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRE D'ACTIVITÉ -->
+  <section class="activity-bar">
+    <div class="activity-bar__current">
+      <div class="activity-bar__avatar">
+        <i class="fas fa-list-check"></i>
+      </div>
+      <div class="activity-bar__info">
+        <div class="activity-bar__code" id="activityBarCode">GA0101</div>
+        <div class="activity-bar__name" id="activityBarName">Well rehabilitation</div>
+      </div>
+    </div>
+    <div class="activity-bar__selectors">
+      <div class="tl-selector">
+        <button type="button" class="tl-selector__trigger" id="activityTrigger">
+          <i class="fas fa-list-check"></i>
+          <span id="activityValue">GA0101 – Well rehabilitation</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="tl-selector__dropdown" id="activityDropdown"></div>
+      </div>
+      <div class="tl-selector">
+        <button type="button" class="tl-selector__trigger" id="geoTrigger">
+          <i class="fas fa-map-location-dot"></i>
+          <span id="geoValue">Geography level 2 (Districts)</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="tl-selector__dropdown" id="geoDropdown"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="timeline-card">
+    <div class="timeline-card__header">
+      <div class="timeline-card__title">
+        <div class="timeline-card__title-icon"><i class="fas fa-clock-rotate-left"></i></div>
+        <div>
+          <h2>Frise temporelle du projet</h2>
+          <p>2011 — 2020 · 5 ans · 8 jalons</p>
+        </div>
+      </div>
+
+      <div class="timeline-controls">
+        <button class="tl-play-btn" id="tlPlayBtn" title="Lancer la lecture">
+          <i class="fas fa-play"></i>
+        </button>
+        <div class="tl-current-date">
+          <div class="tl-current-date__label">Date courante</div>
+          <div class="tl-current-date__value" id="tlCurrentDate">janvier 2011</div>
+        </div>
+        <div class="tl-speed">
+          <input type="radio" id="speed1" name="tlSpeed" value="1" checked>
+          <label for="speed1">1×</label>
+          <input type="radio" id="speed2" name="tlSpeed" value="2">
+          <label for="speed2">2×</label>
+          <input type="radio" id="speed4" name="tlSpeed" value="4">
+          <label for="speed4">4×</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frise -->
+    <div class="timeline-track" id="tlTrack">
+      <div class="timeline-track__years" id="tlYears"></div>
+
+      <div class="timeline-track__line"></div>
+      <div class="timeline-track__progress" id="tlProgress"></div>
+
+      <!-- Jalons (générés en JS) -->
+      <div id="tlMilestones"></div>
+
+      <!-- Curseur déplaçable -->
+      <div class="timeline-track__cursor" id="tlCursor">
+        <div class="timeline-track__cursor-tag" id="tlCursorTag">janvier 2011</div>
+      </div>
+
+      <div class="timeline-track__years-bottom" id="tlYearsBottom"></div>
+    </div>
+
+    <!-- Légende -->
+    <div class="tl-legend">
+      <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--start"></span> Démarrage</div>
+      <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--review"></span> Revue / Examen</div>
+      <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--milestone"></span> Jalon clé</div>
+      <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--event"></span> Événement</div>
+      <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--end"></span> Clôture</div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <div class="tl-main">
+
+    <!-- COLONNE GAUCHE -->
+    <div class="tl-left">
+
+      <!-- KPIs animés -->
+      <div class="kpi-row">
+        <div class="tl-kpi tl-kpi--budget">
+          <div class="tl-kpi__icon"><i class="fas fa-wallet"></i></div>
+          <div class="tl-kpi__label">% Budget</div>
+          <div>
+            <span class="tl-kpi__value" id="kpiBudgetValue">0</span><span class="tl-kpi__suffix">%</span>
+          </div>
+          <div class="tl-kpi__bar"><div class="tl-kpi__bar-fill" id="kpiBudgetBar" style="width:0%"></div></div>
+        </div>
+        <div class="tl-kpi tl-kpi--physique">
+          <div class="tl-kpi__icon"><i class="fas fa-hammer"></i></div>
+          <div class="tl-kpi__label">% Physique</div>
+          <div>
+            <span class="tl-kpi__value" id="kpiPhysiqueValue">0</span><span class="tl-kpi__suffix">%</span>
+          </div>
+          <div class="tl-kpi__bar"><div class="tl-kpi__bar-fill" id="kpiPhysiqueBar" style="width:0%"></div></div>
+        </div>
+        <div class="tl-kpi tl-kpi--achievement">
+          <div class="tl-kpi__icon"><i class="fas fa-flag-checkered"></i></div>
+          <div class="tl-kpi__label">% Achèvement</div>
+          <div>
+            <span class="tl-kpi__value" id="kpiAchievementValue">0</span><span class="tl-kpi__suffix">%</span>
+          </div>
+          <div class="tl-kpi__bar"><div class="tl-kpi__bar-fill" id="kpiAchievementBar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- Story panel -->
+      <div class="story-panel">
+        <div class="story-panel__year" id="storyYear">2011</div>
+        <div class="story-panel__label" id="storyLabel">Avant le démarrage</div>
+        <h3 class="story-panel__title" id="storyTitle">Activité non démarrée</h3>
+        <p class="story-panel__text" id="storyText">À cette date, l'activité n'avait pas encore débuté.</p>
+      </div>
+
+      <!-- Mini-graphe progression -->
+      <div class="tl-chart-card">
+        <h3 class="tl-chart-card__title">Évolution annuelle</h3>
+        <div class="tl-chart-card__sub">% Budget vs % Physique sur la période active</div>
+        <div class="tl-chart-card__body">
+          <canvas id="tlChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLONNE DROITE : Carte -->
+    <div class="tl-map-card">
+      <div class="tl-map-card__header">
+        <div>
+          <h3>Répartition géographique vivante</h3>
+          <div class="tl-map-card__sub">Les régions s'éclairent au fil du temps</div>
+        </div>
+        <div class="tl-map-counter" id="tlMapCounter">
+          <i class="fas fa-map-pin"></i> <strong>0</strong> régions actives
+        </div>
+      </div>
+      <div class="tl-map-card__body">
+        <div id="map" class="map-container"></div>
+        <div class="map-loading" id="mapLoading">
+          <div class="map-loading__spinner"></div>
+          <p>Chargement...</p>
+        </div>
+        <div class="map-legend">
+          <div class="map-legend__title">% Achèvement</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#0F6796"></span> 80 — 100%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#137EB4"></span> 60 — 80%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#5BA3CB"></span> 40 — 60%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#9DC8E0"></span> 20 — 40%</div>
+          <div class="map-legend__item"><span class="map-legend__swatch" style="background:#D5E5EE"></span> 0 — 20%</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script src="activity.js"></script>
+
+</body>
+</html>
