@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord Activités — Fusion</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="../../shared/css/components.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+
+<div class="fusion-app">
+
+  <header class="page-header">
+    <div class="page-header__title">
+      <a href="../../index.html" class="page-header__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Tableau de bord — Activités</h1>
+        <p>Fusion — sidebar, frise temporelle, répartition géographique, KPI et commentaires</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="workspace">
+
+    <!-- =================================================
+         SIDEBAR - Sélecteurs + métadonnées + drill-down région
+         ================================================= -->
+    <aside class="activity-panel">
+
+      <div class="activity-panel__breadcrumb">
+        <i class="fas fa-folder"></i>
+        <strong>Projet DEMO</strong>
+        <i class="fas fa-chevron-right"></i>
+        <span>Composante 1</span>
+        <i class="fas fa-chevron-right"></i>
+        <strong>Activité</strong>
+      </div>
+
+      <!-- Sélecteur Activité -->
+      <div class="selector">
+        <span class="selector__label">Activités</span>
+        <button type="button" class="selector__trigger" id="activityTrigger">
+          <span id="activityTriggerLabel">GA0101 – Well rehabilitation</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="selector__dropdown" id="activityDropdown"></div>
+      </div>
+
+      <!-- Sélecteur Niveau Géographique -->
+      <div class="selector">
+        <span class="selector__label">Niveau Géographique</span>
+        <button type="button" class="selector__trigger" id="geoTrigger">
+          <span id="geoTriggerLabel">Geography level 2 (Districts)</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="selector__dropdown" id="geoDropdown"></div>
+      </div>
+
+      <!-- Métadonnées -->
+      <div class="metadata-grid">
+        <div class="metadata">
+          <span class="metadata__label">Unité</span>
+          <span class="metadata__value" id="metaUnit">EXISTINSTN</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Responsable</span>
+          <span class="metadata__value" id="metaResponsible">CREDO2: M&E Specialist</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Date Début</span>
+          <span class="metadata__value" id="metaStartDate">2 févr. 2011</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Date Fin</span>
+          <span class="metadata__value" id="metaEndDate">14 déc. 2015</span>
+        </div>
+        <div class="metadata">
+          <span class="metadata__label">Statut</span>
+          <span class="metadata__value metadata__value--status" id="metaStatus">En cours</span>
+        </div>
+      </div>
+
+      <!-- Drill-down région sélectionnée -->
+      <div class="region-panel is-hidden" id="regionPanel">
+        <div class="region-panel__header">
+          <div class="region-panel__icon"><i class="fas fa-location-dot"></i></div>
+          <div class="region-panel__title">
+            <span class="region-panel__label">Région sélectionnée</span>
+            <span class="region-panel__name" id="regionPanelName">—</span>
+          </div>
+          <button class="region-panel__close" id="regionPanelClose" title="Désélectionner">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+        <div class="region-panel__kpis">
+          <div class="region-panel__kpi region-panel__kpi--budget">
+            <span class="region-panel__kpi-label">Budget</span>
+            <span class="region-panel__kpi-value" id="regionPanelBudget">—</span>
+          </div>
+          <div class="region-panel__kpi region-panel__kpi--physique">
+            <span class="region-panel__kpi-label">Physique</span>
+            <span class="region-panel__kpi-value" id="regionPanelPhysique">—</span>
+          </div>
+          <div class="region-panel__kpi region-panel__kpi--achievement">
+            <span class="region-panel__kpi-label">Achèvement</span>
+            <span class="region-panel__kpi-value" id="regionPanelAchievement">—</span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- =================================================
+         CONTENU - Frise, répartition géo + KPI, évolution, commentaires
+         ================================================= -->
+    <div class="workspace-main">
+
+      <!-- ===== FRISE TEMPORELLE (pilote l'ensemble du contenu) ===== -->
+      <section class="timeline-card">
+        <div class="timeline-card__header">
+          <div class="timeline-card__title">
+            <div class="timeline-card__title-icon"><i class="fas fa-clock-rotate-left"></i></div>
+            <div>
+              <h2>Frise temporelle du projet</h2>
+              <p>2011 — 2020 · 10 ans · 8 jalons</p>
+            </div>
+          </div>
+
+          <div class="timeline-controls">
+            <button class="tl-play-btn" id="tlPlayBtn" title="Lancer la lecture">
+              <i class="fas fa-play"></i>
+            </button>
+            <div class="tl-current-date">
+              <div class="tl-current-date__label">Date courante</div>
+              <div class="tl-current-date__value" id="tlCurrentDate">janvier 2011</div>
+            </div>
+            <div class="tl-speed">
+              <input type="radio" id="speed1" name="tlSpeed" value="1" checked>
+              <label for="speed1">1×</label>
+              <input type="radio" id="speed2" name="tlSpeed" value="2">
+              <label for="speed2">2×</label>
+              <input type="radio" id="speed4" name="tlSpeed" value="4">
+              <label for="speed4">4×</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-track" id="tlTrack">
+          <div class="timeline-track__years" id="tlYears"></div>
+          <div class="timeline-track__line"></div>
+          <div class="timeline-track__progress" id="tlProgress"></div>
+          <div id="tlMilestones"></div>
+          <div class="timeline-track__cursor" id="tlCursor">
+            <div class="timeline-track__cursor-tag" id="tlCursorTag">janvier 2011</div>
+          </div>
+          <div class="timeline-track__years-bottom" id="tlYearsBottom"></div>
+        </div>
+
+        <div class="tl-legend">
+          <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--start"></span> Démarrage</div>
+          <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--review"></span> Revue / Examen</div>
+          <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--milestone"></span> Jalon clé</div>
+          <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--event"></span> Événement</div>
+          <div class="tl-legend__item"><span class="tl-legend__dot tl-legend__dot--end"></span> Clôture</div>
+        </div>
+      </section>
+
+      <!-- ===== RÉPARTITION GÉOGRAPHIQUE + KPI + RÉGIONS CLASSÉES ===== -->
+      <div class="geo-kpi-grid">
+
+        <div class="map-card">
+          <div class="map-card__header">
+            <div>
+              <h3>Répartition géographique</h3>
+              <div class="map-card__sub">% Achèvement par région, à la date du curseur</div>
+            </div>
+          </div>
+          <div class="map-card__body">
+            <div id="map" class="map-container"></div>
+            <div class="map-loading" id="mapLoading">
+              <div class="map-loading__spinner"></div>
+              <p>Chargement de la carte...</p>
+            </div>
+            <div class="map-legend">
+              <div class="map-legend__title">% Achèvement</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#0F6796"></span> 80 — 100%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#137EB4"></span> 60 — 80%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#5BA3CB"></span> 40 — 60%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#9DC8E0"></span> 20 — 40%</div>
+              <div class="map-legend__item"><span class="map-legend__swatch" style="background:#D5E5EE"></span> 0 — 20%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="geo-kpi-col">
+
+          <!-- KPI (style demo3, sans le style de texte serif) -->
+          <div class="kpi-row kpi-row--fusion">
+            <div class="kpi-card" id="kpiBudget">
+              <div class="kpi-card__top">
+                <span class="kpi-card__label">% Budget</span>
+              </div>
+              <div class="kpi-card__value"><span id="kpiBudgetValue">0</span><span class="kpi-card__suffix">%</span></div>
+              <div class="kpi-card__bar"><div class="kpi-card__bar-fill kpi-card__bar-fill--budget" id="kpiBudgetBar" style="width:0%"></div></div>
+            </div>
+            <div class="kpi-card kpi-card--warning" id="kpiPhysique">
+              <div class="kpi-card__top">
+                <span class="kpi-card__label">% Physique</span>
+              </div>
+              <div class="kpi-card__value"><span id="kpiPhysiqueValue">0</span><span class="kpi-card__suffix">%</span></div>
+              <div class="kpi-card__bar"><div class="kpi-card__bar-fill kpi-card__bar-fill--physique" id="kpiPhysiqueBar" style="width:0%"></div></div>
+            </div>
+            <div class="kpi-card kpi-card--success" id="kpiAchievement">
+              <div class="kpi-card__top">
+                <span class="kpi-card__label">% Achèvement</span>
+              </div>
+              <div class="kpi-card__value"><span id="kpiAchievementValue">0</span><span class="kpi-card__suffix">%</span></div>
+              <div class="kpi-card__bar"><div class="kpi-card__bar-fill kpi-card__bar-fill--achievement" id="kpiAchievementBar" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <!-- Filtre des régions : classement, sous les KPI -->
+          <div class="drill-card">
+            <div class="drill-card__header">
+              <div>
+                <h3>Régions classées</h3>
+                <div class="drill-card__sub">Triées par % Achèvement · <span id="drillCount">0</span> régions</div>
+              </div>
+            </div>
+            <div class="drill-card__body" id="drillList"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ===== ÉVOLUTION ANNUELLE (sans filtre de dates) ===== -->
+      <div class="chart-panel">
+        <div class="panel-header">
+          <div>
+            <h3>Évolution annuelle</h3>
+            <div class="panel-header__sub">% Budget vs % Physique</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <canvas id="activityChart"></canvas>
+        </div>
+      </div>
+
+      <!-- ===== COMMENTAIRES ===== -->
+      <div class="comments-card">
+        <div class="comments-card__icon"><i class="fas fa-comment"></i></div>
+        <div class="comments-card__body">
+          <div class="comments-card__label">Commentaires</div>
+          <p class="comments-card__text" id="comments"></p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script src="activity.js"></script>
+
+</body>
+</html>

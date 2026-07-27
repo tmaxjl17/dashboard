@@ -222,6 +222,24 @@ const DASHBOARDS = [
     lastUpdate: '4 mai 2026'
   },
   {
+    slug: 'activity4',
+    title: 'Tableau de bord — Activités',
+    subtitle: 'Option E · Fusion (sidebar + frise chronologique + répartition géo + KPI + commentaires)',
+    cover: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600',
+    status: 'active',
+    statusLabel: 'Option E',
+    location: 'Côte d\'Ivoire · Géo-localisé',
+    startDate: '2011-01-01',
+    endDate: '2020-12-31',
+    kpis: {
+      indicators: 6,
+      activities: 6,
+      sources: 3
+    },
+    disbursementPct: 56,
+    lastUpdate: '24 juil. 2026'
+  },
+  {
     slug: 'map-explorer',
     title: 'Map Explorer',
     subtitle: 'Option D · Map-first plein écran + panneaux glassmorphism + drill-down régional',
