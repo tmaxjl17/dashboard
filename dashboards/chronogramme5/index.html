@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronogramme — Option E</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="chronogramme5.css">
+</head>
+<body class="e-body">
+
+<div class="e-app">
+
+  <!-- =================================================
+       EN-TÊTE : fil d'Ariane, titre, actions
+       ================================================= -->
+  <header class="e-top">
+    <div class="e-top__main">
+      <nav class="e-crumbs" aria-label="Fil d'Ariane">
+        <a href="../../index.html"><i class="fas fa-arrow-left"></i> Tableaux de bord</a>
+        <span aria-hidden="true">/</span><span id="e-crumb-projet"></span>
+        <span aria-hidden="true">/</span><span id="e-crumb-ptba"></span>
+      </nav>
+      <h1 id="e-title">Chronogramme</h1>
+      <p class="e-sub" id="e-sub"></p>
+    </div>
+    <div class="e-top__actions">
+      <button class="e-btn" type="button" id="e-export"><i class="fas fa-download"></i> Exporter (CSV)</button>
+      <button class="e-btn e-btn--icon" type="button" id="e-theme" aria-label="Thème sombre" title="Thème sombre"><i class="fas fa-moon"></i></button>
+    </div>
+  </header>
+
+  <!-- Indicateurs clés -->
+  <section class="e-kpis" id="e-kpis" aria-label="Indicateurs clés"></section>
+
+  <!-- =================================================
+       ESPACE DE TRAVAIL
+       ================================================= -->
+  <section class="e-work" aria-label="Activités du PTBA">
+    <!-- Vues -->
+    <div class="e-tabs" role="tablist" aria-label="Vue">
+      <button type="button" role="tab" id="e-tab-chrono" data-view="chrono" aria-selected="true" aria-controls="e-view-chrono"><i class="fas fa-bars-staggered"></i> Chronologie</button>
+      <button type="button" role="tab" id="e-tab-table" data-view="table" aria-selected="false" aria-controls="e-view-table"><i class="fas fa-table-list"></i> Tableau</button>
+    </div>
+
+    <!-- Barre d'outils -->
+    <div class="e-toolbar">
+      <div class="e-toolbar__left">
+        <label class="e-search" for="e-q">
+          <i class="fas fa-search"></i>
+          <input type="search" id="e-q" placeholder="Rechercher…" autocomplete="off">
+          <kbd>/</kbd>
+        </label>
+        <label class="e-prop"><span>Statut</span><select id="e-f-statut"><option value="">Tous</option></select></label>
+        <label class="e-prop"><span>Responsable</span><select id="e-f-resp"><option value="">Tous</option></select></label>
+        <label class="e-prop"><span>Localité</span><select id="e-f-loc"><option value="">Toutes</option></select></label>
+        <button class="e-link" type="button" id="e-clear" hidden>Effacer les filtres</button>
+      </div>
+      <div class="e-toolbar__right">
+        <label class="e-prop"><span>Grouper</span>
+          <select id="e-groupe">
+            <option value="resultat">par résultat</option>
+            <option value="statut">par statut</option>
+            <option value="aucun">sans groupe</option>
+          </select>
+        </label>
+        <div class="e-seg e-only-chrono" id="e-echelle" role="group" aria-label="Échelle de la frise">
+          <button type="button" data-v="trimestre" aria-pressed="false">Trimestre</button>
+          <button type="button" data-v="mois" aria-pressed="true">Mois</button>
+          <button type="button" data-v="semaine" aria-pressed="false">Semaine</button>
+        </div>
+        <div class="e-nav e-only-chrono" role="group" aria-label="Se déplacer dans la frise">
+          <button class="e-btn e-btn--icon" type="button" id="e-prev" aria-label="Période précédente" title="Période précédente"><i class="fas fa-chevron-left"></i></button>
+          <button class="e-btn" type="button" id="e-today">Aujourd'hui</button>
+          <button class="e-btn e-btn--icon" type="button" id="e-next" aria-label="Période suivante" title="Période suivante"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vue Chronologie -->
+    <div class="e-view" id="e-view-chrono" role="tabpanel" aria-labelledby="e-tab-chrono">
+      <div class="e-gantt" id="e-gantt">
+        <div class="e-left">
+          <div class="e-head e-lhead">
+            <span>Activité</span><span>Statut</span>
+          </div>
+          <div id="e-lrows"></div>
+        </div>
+        <div class="e-right">
+          <div class="e-head e-thead">
+            <div class="e-track" id="e-thead-track">
+              <div class="e-lane e-lane--top" id="e-lane-top"></div>
+              <div class="e-lane e-lane--bot" id="e-lane-bot"></div>
+              <div class="e-today-pill" id="e-today-pill"></div>
+            </div>
+          </div>
+          <div class="e-scroll" id="e-scroll" tabindex="0" aria-label="Frise chronologique, défilement horizontal">
+            <div class="e-track">
+              <div class="e-grid" id="e-grid"></div>
+              <div id="e-trows"></div>
+              <div class="e-today-line" id="e-today-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="e-legend" id="e-legend"></div>
+    </div>
+
+    <!-- Vue Tableau -->
+    <div class="e-view" id="e-view-table" role="tabpanel" aria-labelledby="e-tab-table" hidden>
+      <div class="e-table-wrap">
+        <table class="e-table" id="e-table">
+          <thead><tr id="e-thead-row"></tr></thead>
+          <tbody id="e-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="e-empty" id="e-empty" hidden>Aucune activité ne correspond à ces filtres. <button class="e-link" type="button" id="e-clear2">Effacer les filtres</button></p>
+    <p class="e-hint"><kbd>↑</kbd> <kbd>↓</kbd> pour parcourir · <kbd>Entrée</kbd> pour ouvrir · <kbd>Échap</kbd> pour fermer · <kbd>/</kbd> pour rechercher</p>
+  </section>
+</div>
+
+<!-- Volet de détail -->
+<aside class="e-sheet" id="e-sheet" aria-label="Détail de l'activité" aria-hidden="true" tabindex="-1"></aside>
+
+<script src="../chronogramme2/data.js"></script>
+<script src="chronogramme5.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronogramme — Option D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="chronogramme4.css">
+</head>
+<body class="chrono-body">
+
+<div class="chrono-app" id="chrono-app">
+
+  <!-- =================================================
+       EN-TÊTE
+       ================================================= -->
+  <header class="chrono-topbar">
+    <div class="chrono-topbar__title">
+      <a href="../../index.html" class="chrono-topbar__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Chronogramme<span id="ch-ptba"></span></h1>
+        <p id="ch-sub"></p>
+      </div>
+    </div>
+    <div class="chrono-topbar__actions">
+      <div class="ch-seg" id="ch-vue" role="group" aria-label="Comparer avec l'écran actuel">
+        <button type="button" data-vue="actuel" aria-pressed="false">Écran actuel</button>
+        <button type="button" data-vue="propose" aria-pressed="true">Écran proposé</button>
+      </div>
+      <button class="ch-btn" type="button" id="ch-btn-theme"><i class="fas fa-moon"></i> <span>Sombre</span></button>
+    </div>
+  </header>
+
+  <!-- =================================================
+       CHRONOGRAMME
+       ================================================= -->
+  <section class="ch-card" aria-label="Chronogramme">
+    <div class="ch-card__head">
+      <div class="ch-filters">
+        <label class="ch-search" for="ch-q">
+          <i class="fas fa-search"></i>
+          <input type="search" id="ch-q" placeholder="Rechercher une activité…" autocomplete="off">
+        </label>
+        <select id="ch-f-loc" aria-label="Localité"><option value="">Toutes les localités</option></select>
+        <select id="ch-f-act" aria-label="Acteur responsable"><option value="">Tous les acteurs</option></select>
+      </div>
+      <div class="ch-nav" role="group" aria-label="Se déplacer dans la frise">
+        <button class="ch-btn ch-btn--icon" type="button" id="ch-nav-prev" title="Trimestre précédent" aria-label="Trimestre précédent"><i class="fas fa-chevron-left"></i></button>
+        <button class="ch-btn" type="button" id="ch-nav-today">Aujourd'hui</button>
+        <button class="ch-btn ch-btn--icon" type="button" id="ch-nav-next" title="Trimestre suivant" aria-label="Trimestre suivant"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+
+    <!-- Compteurs (P5) -->
+    <div class="ch-reveal" id="ch-synth-wrap">
+      <div>
+        <div class="ch-synth-in">
+          <div class="ch-synth" id="ch-synth"></div>
+          <p class="ch-synth-note" id="ch-synth-note"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch-gantt-wrap">
+      <div class="ch-gantt" id="ch-gantt">
+        <div class="ch-g-left">
+          <div class="ch-g-head ch-lhead">
+            <span class="c-code">Code</span>
+            <span class="c-lib">Activité</span>
+            <span class="c-poids" title="Poids au cadre logique"><span class="ch-in">Poids</span></span>
+            <span class="c-cal"><span class="ch-in" id="ch-h-cal">Avancement</span></span>
+            <span class="c-real"><span class="ch-in">Réalisation</span></span>
+          </div>
+          <div class="ch-lrow is-jal"><span class="c-span">Jalons</span></div>
+          <div id="ch-lrows"></div>
+        </div>
+        <div class="ch-g-right">
+          <!-- En-tête collé en haut ; suit le défilement horizontal de la frise -->
+          <div class="ch-g-head ch-thead">
+            <div class="ch-track" id="ch-thead-track">
+              <div class="ch-q-row" id="ch-qrow"></div>
+              <div class="ch-m-row" id="ch-mrow"></div>
+              <div class="ch-today-pill" id="ch-today-pill"></div>
+            </div>
+          </div>
+          <div class="ch-tl-scroll" id="ch-tl-scroll" tabindex="0" aria-label="Frise chronologique, défilement horizontal">
+            <div class="ch-tl-body ch-track">
+              <div class="ch-glines" id="ch-glines"></div>
+              <div class="ch-trow is-jal" id="ch-jal"></div>
+              <div id="ch-trows"></div>
+              <div class="ch-today-line" id="ch-today-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="ch-empty" id="ch-empty" hidden>Aucune activité ne correspond à ces filtres.</p>
+
+    <div class="ch-legend" id="ch-legend"></div>
+  </section>
+</div>
+
+<div class="ch-tip" id="ch-tip" role="tooltip"></div>
+
+<script src="data.js"></script>
+<script src="chronogramme4.js"></script>
+</body>
+</html>
