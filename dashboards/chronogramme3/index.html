@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronogramme — Option C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="chronogramme3.css">
+</head>
+<body class="c3-body">
+
+<div class="c3-app">
+
+  <!-- =================================================
+       EN-TÊTE
+       ================================================= -->
+  <header class="c3-top">
+    <div class="c3-top__title">
+      <a href="../../index.html" class="c3-back" title="Retour à l'accueil"><i class="fas fa-arrow-left"></i></a>
+      <div>
+        <h1>Chronogramme<span id="c3-ptba"></span></h1>
+        <p id="c3-sub"></p>
+      </div>
+    </div>
+    <button class="c3-btn" type="button" id="c3-theme"><i class="fas fa-moon"></i> <span>Sombre</span></button>
+  </header>
+
+  <!-- Synthèse : avancement + compteurs (cliquables pour filtrer) -->
+  <section class="c3-stats" id="c3-stats" aria-label="Synthèse"></section>
+
+  <!-- =================================================
+       CHRONOGRAMME
+       ================================================= -->
+  <section class="c3-card" aria-label="Chronogramme">
+    <div class="c3-bar">
+      <label class="c3-search" for="c3-q">
+        <i class="fas fa-search"></i>
+        <input type="search" id="c3-q" placeholder="Activité, acteur, localité…" autocomplete="off">
+      </label>
+      <div class="c3-tools">
+        <div class="c3-field">
+          <span>Grouper par</span>
+          <div class="c3-seg" id="c3-groupe" role="group" aria-label="Grouper par">
+            <button type="button" data-v="resultat" aria-pressed="true">Résultat</button>
+            <button type="button" data-v="etat" aria-pressed="false">État</button>
+          </div>
+        </div>
+        <div class="c3-field">
+          <span>Échelle</span>
+          <div class="c3-seg" id="c3-echelle" role="group" aria-label="Échelle de la frise">
+            <button type="button" data-v="trimestre" aria-pressed="false">Trimestre</button>
+            <button type="button" data-v="mois" aria-pressed="true">Mois</button>
+            <button type="button" data-v="semaine" aria-pressed="false">Semaine</button>
+          </div>
+        </div>
+        <div class="c3-nav" role="group" aria-label="Se déplacer dans la frise">
+          <button class="c3-btn c3-btn--icon" type="button" id="c3-prev" title="Précédent" aria-label="Période précédente"><i class="fas fa-chevron-left"></i></button>
+          <button class="c3-btn" type="button" id="c3-today-btn">Aujourd'hui</button>
+          <button class="c3-btn c3-btn--icon" type="button" id="c3-next" title="Suivant" aria-label="Période suivante"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="c3-layout" id="c3-layout">
+      <div class="c3-gantt-wrap">
+        <div class="c3-gantt" id="c3-gantt">
+          <div class="c3-left">
+            <div class="c3-head c3-lhead">Activités <span id="c3-count"></span></div>
+            <div id="c3-lrows"></div>
+          </div>
+          <div class="c3-right">
+            <!-- En-tête collé en haut ; suit le défilement horizontal de la frise -->
+            <div class="c3-head c3-thead">
+              <div class="c3-track" id="c3-thead-track">
+                <div class="c3-lane c3-lane--top" id="c3-lane-top"></div>
+                <div class="c3-lane c3-lane--bot" id="c3-lane-bot"></div>
+                <div class="c3-today-pill" id="c3-today-pill"></div>
+              </div>
+            </div>
+            <div class="c3-scroll" id="c3-scroll" tabindex="0" aria-label="Frise chronologique, défilement horizontal">
+              <div class="c3-track">
+                <div class="c3-grid" id="c3-grid"></div>
+                <div id="c3-trows"></div>
+                <div class="c3-today-line" id="c3-today-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <aside class="c3-detail" id="c3-detail" aria-label="Détail de l'activité" hidden></aside>
+    </div>
+    <p class="c3-empty" id="c3-empty" hidden>Aucune activité ne correspond à ces critères.</p>
+
+    <div class="c3-legend" id="c3-legend"></div>
+  </section>
+</div>
+
+<script src="../chronogramme2/data.js"></script>
+<script src="chronogramme3.js"></script>
+</body>
+</html>

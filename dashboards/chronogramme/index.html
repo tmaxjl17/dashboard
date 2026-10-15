@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronogramme — Propositions d'évolution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="chronogramme.css">
+</head>
+<body class="chrono-body">
+
+<div class="chrono-app" id="chrono-app">
+
+  <!-- =================================================
+       EN-TÊTE
+       ================================================= -->
+  <header class="chrono-topbar">
+    <div class="chrono-topbar__title">
+      <a href="../../index.html" class="chrono-topbar__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Chronogramme — Propositions d'évolution</h1>
+        <p>Gantt PTBA reconstruit · 11 propositions activables pour comparer l'avant et l'après</p>
+      </div>
+    </div>
+    <div class="chrono-topbar__actions">
+      <span class="chrono-count" id="ch-count">0 / 11 proposition active</span>
+      <button class="ch-btn" type="button" id="ch-btn-theme"><i class="fas fa-moon"></i> <span>Thème sombre</span></button>
+      <button class="ch-btn ch-btn--primary" type="button" id="ch-btn-present"><i class="fas fa-expand"></i> Mode présentation <kbd>P</kbd></button>
+    </div>
+  </header>
+
+  <!-- =================================================
+       PANNEAU DES PROPOSITIONS (construit par chronogramme.js)
+       ================================================= -->
+  <aside class="chrono-panel" aria-label="Propositions">
+    <div class="chrono-panel__head">
+      <h2>Propositions</h2>
+      <p>Chaque interrupteur modifie le chronogramme en direct. Tout désactivé, l'écran est celui d'aujourd'hui.</p>
+      <div class="ch-bulk">
+        <button class="ch-btn ch-btn--primary" type="button" data-bulk="on">Tout activer</button>
+        <button class="ch-btn" type="button" data-bulk="off">Tout désactiver</button>
+      </div>
+    </div>
+    <div class="ch-horizons" id="ch-horizons"></div>
+    <p class="ch-keys">
+      <kbd>1</kbd>…<kbd>9</kbd> P1 à P9 · <kbd>0</kbd> P10 · touche à droite du 0 : P11<br>
+      <kbd>→</kbd> active la suivante · <kbd>←</kbd> annule la dernière<br>
+      <kbd>A</kbd> tout activer · <kbd>D</kbd> tout désactiver<br>
+      <kbd>P</kbd> mode présentation · <kbd>Échap</kbd> pour en sortir
+    </p>
+  </aside>
+
+  <!-- =================================================
+       CHRONOGRAMME
+       ================================================= -->
+  <main class="chrono-main">
+    <div class="ch-pstrip" aria-label="Propositions actives">
+      <div class="ch-chips" id="ch-chips"></div>
+      <div class="ch-bulk">
+        <button class="ch-btn" type="button" data-bulk="on">Tout activer</button>
+        <button class="ch-btn" type="button" data-bulk="off">Tout désactiver</button>
+        <button class="ch-btn" type="button" id="ch-btn-exit">Quitter <kbd>P</kbd></button>
+      </div>
+    </div>
+
+    <section class="ch-card" aria-labelledby="ch-title">
+      <div class="ch-card__head">
+        <div>
+          <h2 id="ch-title">Chronogramme <span class="ch-card__ptba" id="ch-ptba"></span></h2>
+          <p class="ch-card__sub" id="ch-sub"></p>
+        </div>
+        <div class="ch-filters">
+          <label for="ch-f-loc">Localité<select id="ch-f-loc"><option value="">Toutes</option></select></label>
+          <label for="ch-f-act">Acteur<select id="ch-f-act"><option value="">Tous</option></select></label>
+          <span>Échelle : mois</span>
+          <div class="ch-nav" role="group" aria-label="Se déplacer dans la frise">
+            <button class="ch-btn ch-btn--icon" type="button" id="ch-nav-prev" title="Trimestre précédent" aria-label="Trimestre précédent"><i class="fas fa-chevron-left"></i></button>
+            <button class="ch-btn" type="button" id="ch-nav-today">Aujourd'hui</button>
+            <button class="ch-btn ch-btn--icon" type="button" id="ch-nav-next" title="Trimestre suivant" aria-label="Trimestre suivant"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ch-legend" id="ch-legend"></div>
+
+      <div class="ch-reveal" id="ch-synth-wrap">
+        <div>
+          <div class="ch-synth-in">
+            <div class="ch-synth" id="ch-synth"></div>
+            <p class="ch-synth-note" id="ch-synth-note"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ch-gantt-wrap">
+        <div class="ch-gantt" id="ch-gantt">
+          <div class="ch-g-left">
+            <div class="ch-g-head ch-lhead">
+              <span class="c-code">Code</span>
+              <span class="c-lib">Activité</span>
+              <span class="c-poids" title="Poids au cadre logique"><span class="ch-in">Poids</span></span>
+              <span class="c-cal"><span class="ch-in" id="ch-h-cal">Avancement</span></span>
+              <span class="c-real"><span class="ch-in">Réalisation</span></span>
+            </div>
+            <div class="ch-lrow is-jal"><span class="c-span">Jalons</span></div>
+            <div id="ch-lrows"></div>
+          </div>
+          <div class="ch-g-right">
+            <!-- En-tête collé en haut ; suit le défilement horizontal de la frise -->
+            <div class="ch-g-head ch-thead">
+              <div class="ch-track" id="ch-thead-track">
+                <div class="ch-q-row" id="ch-qrow"></div>
+                <div class="ch-m-row" id="ch-mrow"></div>
+                <div class="ch-today-pill" id="ch-today-pill"></div>
+              </div>
+            </div>
+            <div class="ch-tl-scroll" id="ch-tl-scroll" tabindex="0" aria-label="Frise chronologique, défilement horizontal">
+              <div class="ch-tl-body ch-track">
+                <div class="ch-glines" id="ch-glines"></div>
+                <div class="ch-trow is-jal" id="ch-jal"></div>
+                <div id="ch-trows"></div>
+                <div class="ch-today-line" id="ch-today-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="ch-empty" id="ch-empty" hidden>Aucune activité ne correspond à ces filtres.</p>
+    </section>
+  </main>
+</div>
+
+<div class="ch-tip" id="ch-tip" role="tooltip"></div>
+<div class="ch-toast" id="ch-toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="chronogramme.js"></script>
+</body>
+</html>

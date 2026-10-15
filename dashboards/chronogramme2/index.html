@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronogramme — Écran cible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../../shared/css/tokens.css">
+<link rel="stylesheet" href="chronogramme2.css">
+</head>
+<body class="g2-body">
+
+<div class="g2-app" id="g2-app">
+
+  <!-- =================================================
+       EN-TÊTE
+       ================================================= -->
+  <header class="g2-topbar">
+    <div class="g2-topbar__title">
+      <a href="../../index.html" class="g2-topbar__back" title="Retour à l'accueil">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div>
+        <h1>Chronogramme<span id="g2-ptba"></span></h1>
+        <p id="g2-sub"></p>
+      </div>
+    </div>
+    <div class="g2-topbar__actions">
+      <button class="g2-btn" type="button" id="g2-btn-theme"><i class="fas fa-moon"></i> <span>Thème sombre</span></button>
+      <button class="g2-btn" type="button" id="g2-btn-export"><i class="fas fa-file-export"></i> Exporter (CSV)</button>
+    </div>
+  </header>
+
+  <!-- =================================================
+       BANDE DE SANTÉ : avancement pondéré + filtres par état
+       ================================================= -->
+  <section class="g2-health" aria-label="Synthèse">
+    <div class="g2-kpi" id="g2-kpi"></div>
+    <!-- filtres construits par chronogramme2.js -->
+  </section>
+
+  <!-- =================================================
+       BARRE D'OUTILS
+       ================================================= -->
+  <div class="g2-toolbar">
+    <div class="g2-toolbar__group">
+      <label class="g2-search" for="g2-q">
+        <i class="fas fa-search"></i>
+        <input type="search" id="g2-q" placeholder="Code, activité, acteur…" autocomplete="off">
+      </label>
+      <select class="g2-select" id="g2-f-loc" aria-label="Localité"><option value="">Toutes les localités</option></select>
+      <select class="g2-select" id="g2-f-act" aria-label="Acteur responsable"><option value="">Tous les acteurs</option></select>
+    </div>
+    <div class="g2-toolbar__group">
+      <div class="g2-seg" role="group" aria-label="Échelle de la frise" id="g2-zoom">
+        <button type="button" data-zoom="fit" aria-pressed="false">Ajusté</button>
+        <button type="button" data-zoom="mois" aria-pressed="true">Mois</button>
+        <button type="button" data-zoom="semaine" aria-pressed="false">Semaine</button>
+      </div>
+      <button class="g2-btn" type="button" id="g2-btn-today"><i class="fas fa-crosshairs"></i> Aujourd'hui</button>
+      <button class="g2-btn" type="button" id="g2-btn-proj" aria-pressed="true"><i class="fas fa-chart-line"></i> Projections</button>
+      <button class="g2-btn" type="button" id="g2-btn-dense" aria-pressed="false"><i class="fas fa-bars"></i> Compact</button>
+      <button class="g2-btn" type="button" id="g2-btn-fold"><i class="fas fa-compress"></i> <span>Tout replier</span></button>
+    </div>
+  </div>
+
+  <!-- =================================================
+       GANTT
+       ================================================= -->
+  <section class="g2-gantt" aria-label="Chronogramme">
+    <div class="g2-scroll" id="g2-scroll">
+      <div class="g2-grid" id="g2-grid">
+        <div class="g2-row g2-head">
+          <div class="g2-left">
+            <span class="g2-code">Code</span>
+            <span class="g2-lib">Activité · responsable</span>
+            <span class="g2-ecart" title="Écart constaté à la fin prévue (clôturées ou échues), sinon jours restants">Écart</span>
+            <span class="g2-av" title="Remplissage : quantités réalisées · repère : temps écoulé">Réalisé / attendu</span>
+          </div>
+          <div class="g2-track" id="g2-head-track"></div>
+        </div>
+        <div class="g2-bodywrap" id="g2-bodywrap">
+          <div class="g2-overlay" id="g2-overlay"></div>
+          <div class="g2-today" id="g2-today"></div>
+          <div class="g2-row is-jal">
+            <div class="g2-left"><span class="g2-lib">Jalons</span></div>
+            <div class="g2-track" id="g2-jal"></div>
+          </div>
+          <div id="g2-rows"></div>
+          <p class="g2-empty" id="g2-empty" hidden>Aucune activité ne correspond à ces filtres.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="g2-legend" aria-label="Légende">
+    <span class="g2-lg"><span class="g2-lg-act"></span>Période réalisée, remplie selon les quantités</span>
+    <span class="g2-lg"><span class="g2-lg-base"></span>Prévu au PTBA</span>
+    <span class="g2-lg"><span class="g2-lg-tick"></span>Relevé validé</span>
+    <span class="g2-lg"><span class="g2-lg-stale"></span>Depuis le dernier relevé</span>
+    <span class="g2-lg"><span class="g2-lg-proj"></span>Fin projetée au rythme observé</span>
+    <span class="g2-lg"><span class="g2-lg-ghost"></span>Aucun relevé</span>
+    <span class="g2-lg"><span class="g2-lg-jalon"></span>Jalon</span>
+    <span class="g2-lg"><span class="g2-lg-today"></span>Aujourd'hui</span>
+    <span class="g2-lg-sep" aria-hidden="true"></span>
+    <span id="g2-legend-etats" class="g2-lg" style="gap:16px"></span>
+  </footer>
+</div>
+
+<aside class="g2-drawer" id="g2-drawer" aria-label="Détail de l'activité" aria-hidden="true">
+  <div class="g2-drawer__head">
+    <div id="g2-drawer-title"></div>
+    <button class="g2-drawer__close" type="button" id="g2-drawer-close" title="Fermer (Échap)"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="g2-drawer__body" id="g2-drawer-body"></div>
+  <div class="g2-drawer__nav">
+    <button class="g2-btn" type="button" id="g2-prev"><i class="fas fa-arrow-up"></i> Précédente</button>
+    <button class="g2-btn" type="button" id="g2-next">Suivante <i class="fas fa-arrow-down"></i></button>
+  </div>
+</aside>
+
+<div class="g2-tip" id="g2-tip" role="tooltip"></div>
+
+<script src="data.js"></script>
+<script src="chronogramme2.js"></script>
+</body>
+</html>

@@ -256,6 +256,96 @@ const DASHBOARDS = [
     },
     disbursementPct: 66,
     lastUpdate: '4 mai 2026'
+  },
+  {
+    slug: 'chronogramme',
+    title: 'Chronogramme — Propositions',
+    subtitle: 'Gantt PTBA · 11 propositions activables (avant / après) + mode présentation',
+    cover: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600',
+    status: 'active',
+    statusLabel: 'Gantt · A',
+    location: 'Côte d\'Ivoire · PTBA 2026',
+    startDate: '2026-01-01',
+    endDate: '2027-03-31',
+    kpis: {
+      indicators: 0,
+      activities: 12,
+      sources: 1
+    },
+    disbursementPct: 0,
+    lastUpdate: '14 oct. 2026'
+  },
+  {
+    slug: 'chronogramme2',
+    title: 'Chronogramme — Écran cible',
+    subtitle: 'Option B · Gantt de suivi (prévu / réalisé / projection) + détail avec courbe d\'avancement',
+    cover: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600',
+    status: 'active',
+    statusLabel: 'Gantt · B',
+    location: 'Côte d\'Ivoire · PTBA 2026',
+    startDate: '2026-01-01',
+    endDate: '2027-03-31',
+    kpis: {
+      indicators: 0,
+      activities: 12,
+      sources: 1
+    },
+    disbursementPct: 0,
+    lastUpdate: '14 oct. 2026'
+  },
+  {
+    slug: 'chronogramme3',
+    title: 'Chronogramme — Timeline épurée',
+    subtitle: 'Option C · Liste étroite + barres porteuses d\'information, regroupement par résultat ou par état, panneau de détail',
+    cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600',
+    status: 'active',
+    statusLabel: 'Gantt · C',
+    location: 'Côte d\'Ivoire · PTBA 2026',
+    startDate: '2026-01-01',
+    endDate: '2027-03-31',
+    kpis: {
+      indicators: 0,
+      activities: 12,
+      sources: 1
+    },
+    disbursementPct: 0,
+    lastUpdate: '15 oct. 2026'
+  },
+  {
+    slug: 'chronogramme4',
+    title: 'Chronogramme — Option A modernisée',
+    subtitle: 'Option D · Structure de l\'option A, finition sobre + comparaison écran actuel / proposé',
+    cover: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600',
+    status: 'active',
+    statusLabel: 'Gantt · D',
+    location: 'Côte d\'Ivoire · PTBA 2026',
+    startDate: '2026-01-01',
+    endDate: '2027-03-31',
+    kpis: {
+      indicators: 0,
+      activities: 12,
+      sources: 1
+    },
+    disbursementPct: 0,
+    lastUpdate: '15 oct. 2026'
+  },
+  {
+    slug: 'chronogramme5',
+    title: 'Chronogramme — Outil de pilotage',
+    subtitle: 'Option E · Vues Chronologie / Tableau triable, statuts en pastilles, filtres, volet de détail au clavier, export CSV',
+    cover: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600',
+    status: 'active',
+    statusLabel: 'Gantt · E',
+    location: 'Côte d\'Ivoire · PTBA 2026',
+    startDate: '2026-01-01',
+    endDate: '2027-03-31',
+    kpis: {
+      indicators: 0,
+      activities: 12,
+      sources: 1
+    },
+    disbursementPct: 0,
+    lastUpdate: '15 oct. 2026'
   }
   // Ajouter ici les futurs tableaux de bord
 ];

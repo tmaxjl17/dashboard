@@ -52,8 +52,18 @@ c:\wamp64\www\dashboard\
     ├── progress-report/       rapport d'avancement editorial avec sidebar conversation
     │                          (refonte UX/UI complete : hero + KPIs + sommaire + sections
     │                           + callouts + lightbox + edition contentEditable + export PDF)
-    └── map-explorer/          carte plein écran avec panneaux flottants glassmorphism
-                               (Option D · drill-down régional + recherche + 5 fonds de carte)
+    ├── map-explorer/          carte plein écran avec panneaux flottants glassmorphism
+    │                          (Option D · drill-down régional + recherche + 5 fonds de carte)
+    ├── chronogramme/          Gantt PTBA reconstruit + 11 propositions d'évolution activables
+    │                          (Option A · avant / après en direct, mode présentation, thème clair/sombre)
+    ├── chronogramme2/         Gantt de suivi d'exécution — écran cible
+    │                          (Option B · prévu / réalisé / projection, panneau détail + courbe en S)
+    ├── chronogramme3/         Timeline épurée (Option C · liste étroite + barres, groupement résultat / état,
+    │                          panneau de détail ; réutilise chronogramme2/data.js)
+    ├── chronogramme4/         Option A modernisée sans excès (Option D · même structure et calculs,
+    │                          finition sobre, sélecteur écran actuel / écran proposé)
+    └── chronogramme5/         Outil de pilotage professionnel (Option E · vues Chronologie / Tableau,
+                               filtres, volet de détail au clavier, export CSV ; réutilise chronogramme2/data.js)
 ```
 
 ---
@@ -138,6 +148,48 @@ c:\wamp64\www\dashboard\
 - [x] **Export PDF** via `window.print()` avec `@media print` qui cache topbar/conversation/toolbar et préserve les page-breaks entre sections
 - [x] **Données factices riches** : projet DEMO, T2 2023, KPIs avec deltas, 4 sections développées, 2 commentaires initiaux, auteur OUELLETTE Christelle + validateur DUPONT Jean (avatars Pravatar)
 - [x] **Inscription** dans `dashboards.js` (slug `progress-report`) — apparaît dans la home
+
+### Chronogramme — propositions d'évolution (`chronogramme/`)
+- [x] **Gantt reconstruit en HTML/CSS pur** (sans bibliothèque) : tableau à gauche (code, libellé, poids, avancement, réalisation) + frise janv. 2026 → mars 2027 (trimestres + mois, jalons), 12 activités réparties en 3 résultats repliables. Données fictives dans `data.js` (`CHRONO_DATA`), situation figée au 14 oct. 2026 ; elles couvrent tous les cas : conforme, en retard, sans relevé, débordement, à venir, clôturée, échéance proche.
+- [x] **11 propositions activables par interrupteur**, groupées par horizon, avec mise à jour en direct : P1 ratio réel ÷ prévu borné à 100 % · P2 trois états de barre (pointillés / hachures) · P3 retard en jours · P4 barre de période réelle · P5 bande de synthèse à 4 compteurs filtrants · P6 couleur + forme par état · P7 ligne « aujourd'hui » · P8 infobulle riche · P9 taux de réalisation (quantités) · P10 avancement pondéré par le poids du cadre logique (formule visible dans l'infobulle) · P11 dates de terrain au jour près. Boutons « Tout activer / Tout désactiver » et « Activer l'horizon ».
+- [x] **Chiffres exacts** : tous les % sont recalculés à partir des dates ; le remplissage de chaque barre vaut exactement le % affiché (seule exception volontaire : l'écran actuel, où un 184 % donne une barre pleine — c'est le défaut corrigé par P1).
+- [x] **Mode présentation** (bouton ou touche `P`, plein écran si autorisé) : masque l'en-tête et le panneau, garde des pastilles P1–P11 ; clavier `1`…`9`, `0`, touche à droite du 0, `→` / `←`, `A` / `D`, `Échap`. Toast indiquant la proposition activée.
+- [x] **Couleurs** : uniquement les tokens de `shared/css/tokens.css` (état actuel = `--primary`, conforme = `--success`, retard = `--danger`, échéance = `--warning`, clôturée = `--purple`, sans suivi / à venir = gris), chaque couleur doublée d'une forme. **Thème sombre** au bouton (choix mémorisé en localStorage) reprenant la palette inversée de `demo2/css/theme-dark.css`. Texte ≥ 14 px pour la projection.
+- [x] **Défilement horizontal de la frise** (même mécanique que l'option D) : 150 px par mois, seule la frise défile, tableau de gauche fixe, en-tête des mois collé et synchronisé, libellé de trimestre qui reste lisible, boutons ‹ Aujourd'hui ›, ouverture sur aujourd'hui. Quand la frise a le focus, `←` / `→` la font défiler au lieu d'activer les propositions.
+
+### Chronogramme — Option B · Écran cible (`chronogramme2/`)
+- [x] **Gantt de suivi d'exécution** (conventions « tracking Gantt ») : trait fin = prévu PTBA ; barre épaisse = période réalisée, remplie selon les **quantités** réalisées ; **crans** = relevés validés ; **hachures** = temps écoulé depuis le dernier relevé (fraîcheur de la donnée) ; **pointillés + cercle** = fin projetée au rythme observé (vert si avant la fin prévue, rouge sinon ; flèche + mois si hors frise). Barre de résumé par résultat avec avancement pondéré.
+- [x] **Colonnes figées** (défilement unique, en-tête et colonnes collants) : forme + code, libellé + acteur · localité, **écart** (constaté pour les clôturées/échues, jours restants sinon), **puce réalisé / attendu** (remplissage = quantités, repère = calendrier écoulé ; couleur selon l'écart en points).
+- [x] **Bande de santé** : réalisé pondéré de la composante vs attendu à date + 5 filtres par état avec compteurs (Toutes / En retard / Sans suivi / Échéance sous 30 j / Clôturées). Recherche, localité, acteur.
+- [x] **Échelle** : Ajusté (tient dans l'écran) / Mois / Semaine (n° ISO), transition de largeur, bouton « Aujourd'hui » (touche `T`). Ouverture en **Mois** (≈ 150 px par mois, défilement horizontal) centrée sur aujourd'hui. Projections masquables, densité compacte, tout replier/déplier.
+- [x] **Panneau de détail** (clic ou `Entrée`, `↑`/`↓` pour naviguer, `Échap`) : statut, points d'attention générés (échéance dépassée, écart calendrier/réalisation, relevé ancien, projection tardive), 4 chiffres clés, dates prévu/réel/dernier relevé/projection, **courbe d'avancement en S** (cumul des relevés vs plan linéaire + projection), table des relevés.
+- [x] **Export CSV** (séparateur `;`, BOM pour Excel) des activités filtrées. Données : `data.js` propre, relevés datés avec quantités. Couleurs : tokens partagés uniquement ; thème sombre identique à l'option A (même clé localStorage).
+
+### Chronogramme — Option C · Timeline épurée (`chronogramme3/`)
+Refaite le 15 oct. 2026 (la première version, gélules + mini-carte + glisser/zoom, était jugée trop chargée). Parti pris distinct de D : pas de tableau à colonnes, l'information est portée par les barres.
+- [x] **Liste étroite à gauche** : libellé de l'activité + forme d'état, code et localité. Lignes de 52 px.
+- [x] **Une barre par activité** : barre claire = période prévue au PTBA, remplie selon le réalisé (quantités) ; on lit l'avance ou le retard en comparant la fin du remplissage à la ligne « Aujourd'hui ». Hachures = dépassement de la fin prévue (jusqu'à la clôture réelle ou à aujourd'hui) ; contour pointillé = aucun relevé ; contour simple = à venir. Après la barre : % réalisé et pastille de retard « +106 j ».
+- [x] **Grouper par Résultat** (avec % pondéré et barre de synthèse) **ou par État** (en retard d'abord) ; groupes repliables.
+- [x] **Échelle** Trimestre / Mois / Semaine (n° ISO) ; ouverture en Mois (150 px par mois). Défilement horizontal de la frise seule, en-tête collé et synchronisé, boutons ‹ Aujourd'hui › (une année, un trimestre ou un mois à la fois selon l'échelle).
+- [x] **Synthèse sobre** : avancement pondéré avec repère « attendu à date », compteurs En retard / Sans suivi / Échéance sous 30 j / Clôturées (cliquables pour filtrer). Recherche par activité, acteur ou localité.
+- [x] **Panneau de détail ancré à droite** (suit la page, pas de superposition) : état, réalisé vs attendu avec quantités, écart à la fin prévue, acteur, localité, dates prévues et réelles, poids, tableau des relevés validés (période, date, quantité, cumul), fin estimée au rythme observé. Clic sur la ligne, `Entrée`, `Échap` pour fermer.
+- [x] Couleurs : tokens partagés ; thème sombre commun aux quatre options.
+
+### Chronogramme — Option D · Option A modernisée (`chronogramme4/`)
+- [x] **Même structure et mêmes calculs que l'option A** (tableau Code / Activité / Poids / Calendaire / Réalisation + frise trimestres/mois, jalons, résultats repliables, infobulle riche) avec les **onze propositions appliquées d'office**.
+- [x] **Sélecteur « Écran actuel / Écran proposé »** à la place du panneau des onze interrupteurs : la comparaison avant / après en un clic.
+- [x] **Finition sobre** : coins arrondis (barres 6 px, cartes), filets plus légers, en-tête de frise collé et légèrement translucide, compteurs compacts en ligne (cliquables pour filtrer), retard en pastille, ligne et repère « aujourd'hui » en bleu `--primary`, légende sous le Gantt, recherche. Lignes de 40 px, défilement de page. Pas de nouveau mode d'interaction.
+- [x] **Défilement horizontal de la frise** : largeur fixe de 150 px par mois (15 mois = 2 250 px). Seule la frise défile (barre de défilement fine, Maj + molette, pavé tactile, flèches du clavier) ; le tableau de gauche reste en place, avec une ombre légère dès qu'on a défilé. L'en-tête des mois reste collé en haut de la page et suit le défilement, et le libellé du trimestre en cours de lecture glisse pour rester lisible. Boutons ‹ Aujourd'hui › (un trimestre à la fois). À l'ouverture, la frise se place sur aujourd'hui (au premier tiers de la zone visible). La molette verticale continue de faire défiler la page.
+- [x] Données : `data.js` propre (copie de l'option A). Couleurs : tokens partagés ; thème sombre commun aux quatre options.
+
+### Chronogramme — Option E · Outil de pilotage professionnel (`chronogramme5/`)
+Codes des outils de gestion de projet actuels, sans effet décoratif. Mêmes données et calculs que B et C.
+- [x] **En-tête** : fil d'Ariane (Tableaux de bord / projet / PTBA), titre, situation, export CSV, thème. **Bandeau d'indicateurs** : avancement pondéré avec repère « attendu à date », puis En retard / Sans suivi / Échéance proche / Clôturées (cliquables = filtre de statut).
+- [x] **Deux vues sur les mêmes activités filtrées** (onglets) : **Chronologie** (responsable en initiales, code + libellé, statut en pastille ; barre prévue remplie selon le réalisé, hachures de dépassement, % + quantités + pastille de retard ; groupes repliables avec % pondéré) et **Tableau** triable par colonne (code, activité, statut, responsable, localité, fin prévue, réalisé, écart ; tri par défaut : écart, le plus en retard d'abord).
+- [x] **Filtres en propriétés** (Statut, Responsable, Localité) + recherche (`/`) + « Effacer les filtres » ; **Grouper** par résultat, par statut ou sans groupe (les deux vues).
+- [x] **Échelle** Trimestre / Mois / Semaine (n° ISO + date du lundi, week-ends grisés) ; défilement horizontal de la frise seule, en-tête collé et synchronisé, ‹ Aujourd'hui ›.
+- [x] **Volet de détail** (glisse depuis la droite) : statut, propriétés, réalisé vs attendu avec quantités, écart, fil des relevés (du plus récent au plus ancien, avec cumul), fin estimée au rythme observé. Navigation `↑` / `↓` (et boutons dans le volet), `Échap` pour fermer ; la ligne et la barre sélectionnées sont ramenées à l'écran.
+- [x] **Export CSV** des activités filtrées (séparateur `;`, UTF-8 avec BOM pour Excel). Couleurs : tokens partagés ; thème sombre commun aux cinq options.
 
 ### Indicateurs (anciens variants)
 - [x] **Option C** (`indicateurs3`) — Cockpit Editorial : sidebar gauche compacte sticky 320px (sélecteurs + définition + métadonnées 3 chips + barre temporelle projet avec curseur "Aujourd'hui" et % calendrier écoulé), hero 2 colonnes avec **demi-gauge SVG 220×130** (arc semi-circulaire animé en stroke-dasharray, couleur sémantique selon perf, marqueur fantôme blanc qui montre la trajectoire attendue) + identité (code chip + badge validé/non validé + titre Fraunces 28px) + sparkline inline 280×56 avec gradient sous la courbe et chip de tendance (+/− pts depuis la référence) + bloc statut adaptatif coloré (À l'heure / En avance / En retard / En retard significatif) calculé vs trajectoire linéaire référence→cible au prorata du temps. Bandeau **4 stat-cards sémantiques** (Référence/Actuelle/Cible/Restant) avec bordure haute colorée + icône + count-up animé + scope adaptatif (région ou global). Graphe d'évolution avec axe X compact (autoSkip + maxTicksLimit 12), zone gradient + trajectoire cible pointillée verte + dernier point accentué. Section géo 2 colonnes : carte Leaflet choroplèthe (clic région = drill-down + bascule des KPIs) + classement des régions (cards avec barre de progression colorée + rang + nom + %). Bouton "Désélectionner" pill rouge en haut de la carte quand une région est active.
